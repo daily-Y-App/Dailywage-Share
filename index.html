@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Wage Share</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            padding: 40px 20px;
+            background-color: #f0f2f5;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 400px;
+            margin: auto;
+        }
+        /* App Icon ကို ပုံထဲကအတိုင်း ဝိုင်းဝိုင်းလေးဖြစ်အောင် လုပ်ထားတာပါ */
+        .app-icon {
+            width: 120px;
+            height: 120px;
+            border-radius: 30px;
+            object-fit: cover;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h2 { margin: 10px 0; color: #333; }
+        p { color: #666; line-height: 1.5; margin-bottom: 30px; }
+        
+        /* Share ခလုတ်ကို အစိမ်းရောင်လှလှလေး လုပ်ထားပါတယ် */
+        .btn-share {
+            background-color: #28a745;
+            color: white;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+        .btn-share:active { transform: scale(0.95); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <img src="https://i.postimg.cc/zDKXq9WW/trashed-1770869976-IMG-20260112-174321.png" class="app-icon" alt="Daily Wage Icon">
+    
+    <h2>Daily Wage</h2>
+    <p>နေ့စဉ်ဝင်ငွေ/ထွက်ငွေ စာရင်းမှတ်တမ်း App <br> (မြန်မာဘာသာဖြင့် အခမဲ့)</p>
+    
+    <button class="btn-share" onclick="shareApp()">
+        📤 သူငယ်ချင်းများကို မျှဝေမည်
+    </button>
+</div>
+
+<script>
+function shareApp() {
+    // ရှဲလိုက်ရင် ပေါ်မယ့် စာသားနဲ့ လင့်ခ်
+    const shareData = {
+        title: 'Daily Wage App',
+        text: 'နေ့စားခစာရင်းတွေမှတ်ဖို့ တကယ်အသုံးဝင်တဲ့ Daily Wage App လေးပါ။ ဒီမှာ အခမဲ့ဒေါင်းလုဒ်ဆွဲလို့ရတယ်နော် -',
+        url: 'https://apkpure.com/daily-wage/com.daily.wage/download'
+    };
+
+    if (navigator.share) {
+        navigator.share(shareData)
+            .then(() => console.log('Shared successfully'))
+            .catch((err) => console.log('Error sharing:', err));
+    } else {
+        // HTTPS မဟုတ်ရင် သို့မဟုတ် Browser က Share Support မပေးရင် Link ကို Copy ကူးပေးမယ်
+        const dummy = document.createElement('textarea');
+        document.body.appendChild(dummy);
+        dummy.value = shareData.text + " " + shareData.url;
+        dummy.select();
+        document.execCommand('copy');
+        document.body.removeChild(dummy);
+        alert("Link ကို Copy ကူးပြီးသားဖြစ်၍ မည်သည့်နေရာတွင်မဆို Paste လုပ်ပြီး မျှဝေနိုင်ပါပြီ။");
+    }
+}
+</script>
+
+</body>
+</html>
