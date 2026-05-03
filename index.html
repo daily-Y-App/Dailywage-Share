@@ -10,76 +10,73 @@
     <script type='text/javascript' src='https://pl28344759.effectivegatecpm.com/eb/25/40/eb25401554277dcd898bb0414f0023b0.js'></script>
 
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
-        .reward-card { background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border: 1px solid #e2e8f0; }
-        .progress-fill { transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .glass-ui { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(8px); }
+        .btn-disabled { filter: grayscale(1); cursor: not-allowed; opacity: 0.6; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #3498db; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; }
     </style>
 </head>
-<body class="pb-32">
+<body class="pb-24">
 
-    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b p-4">
+    <nav class="sticky top-0 z-50 glass-ui border-b p-4 shadow-sm">
         <div class="max-w-md mx-auto flex justify-between items-center">
             <div class="flex items-center gap-2">
-                <span class="text-2xl">💰</span>
-                <div>
-                    <p class="text-[10px] text-gray-500 font-bold uppercase">Balance</p>
-                    <p id="baht-display" class="font-bold text-green-600 text-lg">฿ 0.00</p>
-                </div>
+                <img src="https://i.postimg.cc/XY0Y8ncq/1772256032115.png" class="w-8 h-8 rounded-lg shadow-sm" alt="logo">
+                <span class="font-bold text-slate-800">Daily Wage</span>
             </div>
-            <div class="text-right">
-                <p id="total-points" class="bg-gray-100 px-3 py-1 rounded-full text-sm font-bold text-gray-700">0 Points</p>
+            <div class="bg-green-500 text-white px-4 py-1 rounded-full font-bold shadow-sm">
+                <span id="points-val">0</span> Pts
             </div>
         </div>
     </nav>
 
     <main class="max-w-md mx-auto p-4 space-y-6">
-        
-        <section class="reward-card rounded-3xl p-6 shadow-xl relative overflow-hidden">
-            <div class="relative z-10">
-                <h3 class="text-gray-800 font-bold text-lg mb-1">Invite 10 Friends → Earn ฿10</h3>
-                <p class="text-gray-500 text-xs mb-4">သူငယ်ချင်း ၁၀ ယောက်ဖိတ်ခေါ်ပြီး Bonus ရယူပါ</p>
-                
-                <div class="w-full bg-gray-200 h-4 rounded-full mb-2 overflow-hidden">
-                    <div id="progress-bar" class="progress-fill bg-green-500 h-full w-[0%]"></div>
-                </div>
-                <div class="flex justify-between text-xs font-bold text-gray-600">
-                    <span id="invite-count">Invited: 0/10</span>
-                    <span id="status-hint">Almost there!</span>
-                </div>
-            </div>
-        </section>
 
-        <section class="grid grid-cols-2 gap-4">
-            <div onclick="dailyLogin()" class="bg-white p-4 rounded-2xl shadow-sm border flex flex-col items-center gap-2 active:scale-95 transition cursor-pointer">
-                <span class="text-2xl">📅</span>
-                <span class="text-xs font-bold text-gray-700">Daily Login</span>
-                <span class="text-[10px] text-blue-500">+2 Points</span>
-            </div>
-            <div onclick="watchAdTask()" class="bg-white p-4 rounded-2xl shadow-sm border flex flex-col items-center gap-2 active:scale-95 transition cursor-pointer">
-                <span class="text-2xl">📺</span>
-                <span class="text-xs font-bold text-gray-700">Watch Ads</span>
-                <span class="text-[10px] text-orange-500">+5 Points</span>
-            </div>
-        </section>
-
-        <section class="text-center space-y-4">
-            <div class="relative inline-block">
-                <img src="https://i.postimg.cc/XY0Y8ncq/1772256032115.png" class="w-24 h-24 mx-auto rounded-2xl shadow-lg border-2 border-white mb-2">
-            </div>
-            <h2 class="font-bold text-xl text-gray-800">Daily Wage App</h2>
-            <p class="text-sm text-gray-500 px-8">စာရင်းမှတ်ရင်း ပိုက်ဆံစုကြမယ်။ ဖိတ်ခေါ်သူတစ်ဦးလျှင် ၅ မှတ် ချက်ချင်းရ။</p>
+        <section class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
+            <h3 class="font-bold text-slate-800 text-lg mb-1">Invite 10 Friends → Earn ฿10</h3>
+            <p class="text-xs text-slate-500 mb-4">သူငယ်ချင်း ၁၀ ယောက်ဖိတ်ခေါ်ပြီး Bonus ရယူပါ</p>
             
-            <button onclick="shareApp()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg flex items-center justify-center gap-3 active:scale-95 transition-all">
-                <span>🚀 သူငယ်ချင်းများကို ဖိတ်ခေါ်မည်</span>
+            <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+                <div class="flex justify-between text-xs font-bold mb-2">
+                    <span id="invite-status">Invited: 0/10</span>
+                    <span class="text-green-600">Keep going!</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-2.5">
+                    <div id="progress-bar" class="bg-green-500 h-2.5 rounded-full transition-all duration-700" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <button onclick="shareApp()" class="w-full mt-5 bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg active:scale-95 transition-all flex justify-center items-center gap-2">
+                🚀 သူငယ်ချင်းများကို ဖိတ်ခေါ်မည်
+            </button>
+        </section>
+
+        <section class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-slate-800">Watch Ads to Earn</h3>
+                <span class="text-[10px] bg-orange-100 text-orange-600 px-2 py-1 rounded-lg font-bold">+5 PTS</span>
+            </div>
+
+            <div class="bg-slate-100 rounded-xl p-2 mb-4 min-h-[50px] flex items-center justify-center text-[10px] text-slate-400">
+                <div id="container-0c2b6d3f941113823d5379a543284bf7">
+                    <script async="async" data-cfasync="false" src="https://pl28343177.profitablecpmratenetwork.com/0c2b6d3f941113823d5379a543284bf7/invoke.js"></script>
+                </div>
+            </div>
+
+            <button id="ad-btn" onclick="startAdProcess()" class="w-full py-4 bg-orange-500 text-white rounded-2xl font-bold shadow-md active:scale-95 transition-all">
+                📺 ကြော်ငြာကြည့်ပြီး Point ယူမည်
             </button>
             
-            <p class="text-[10px] text-gray-400">Minimum Withdraw: 1000 Points (฿100)</p>
+            <p id="ad-timer-text" class="hidden text-center text-xs text-orange-600 font-bold mt-3">
+                ကြော်ငြာကြည့်နေသည်... <span id="timer-sec">30</span> စက္ကန့် စောင့်ပါ
+            </p>
         </section>
 
     </main>
 
-    <div class="ad-banner-footer" style="position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; z-index: 2000; display: flex; flex-direction: column; justify-content: center; align-items: center; border-top: 1px solid #ddd; padding: 5px 0; box-shadow: 0 -2px 10px rgba(0,0,0,0.1);">
-        <span style="font-size: 8px; color: #ccc; margin-bottom: 2px;">ADVERTISEMENT</span>
+    <div class="fixed bottom-0 left-0 w-full bg-white border-t p-2 flex flex-col items-center z-[1000]">
+        <span class="text-[9px] text-slate-400 mb-1 tracking-widest">ADVERTISEMENT</span>
         <script>
             atOptions = { 'key' : '1f368fdf67bf1944d873877b1354fd14', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
         </script>
@@ -87,84 +84,85 @@
     </div>
 
     <script>
-        // --- Core Logic ---
-        let data = {
-            points: parseInt(localStorage.getItem('dw_points')) || 0,
-            invites: parseInt(localStorage.getItem('dw_invites')) || 0,
-            lastLogin: localStorage.getItem('dw_last_login') || ''
-        };
+        let points = parseInt(localStorage.getItem('userPoints')) || 0;
+        let invites = parseInt(localStorage.getItem('inviteCount')) || 0;
+        let isWatchingAd = false;
 
-        const CONVERSION_RATE = 10; // 100 points = 10 baht
+        updateUI();
 
         function updateUI() {
-            // Points & Baht
-            document.getElementById('total-points').innerText = `${data.points} Points`;
-            const baht = (data.points / 100) * CONVERSION_RATE;
-            document.getElementById('baht-display').innerText = `฿ ${baht.toFixed(2)}`;
-
-            // Invite Progress
-            const inviteCount = data.invites % 10; // Reset progress visual every 10
-            const progressPercent = (inviteCount / 10) * 100;
-            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
-            document.getElementById('invite-count').innerText = `Invited: ${inviteCount}/10`;
-            
-            if(inviteCount >= 7) document.getElementById('status-hint').innerText = "Almost there! 🔥";
-            else document.getElementById('status-hint').innerText = "Keep going!";
-
-            // Save
-            localStorage.setItem('dw_points', data.points);
-            localStorage.setItem('dw_invites', data.invites);
+            document.getElementById('points-val').innerText = points;
+            document.getElementById('invite-status').innerText = `Invited: ${invites}/10`;
+            document.getElementById('progress-bar').style.width = `${(invites / 10) * 100}%`;
         }
 
+        // --- Ad Logic Fix ---
+        function startAdProcess() {
+            if (isWatchingAd) return;
+
+            const btn = document.getElementById('ad-btn');
+            const timerText = document.getElementById('ad-timer-text');
+            const timerSec = document.getElementById('timer-sec');
+            
+            isWatchingAd = true;
+            btn.classList.add('btn-disabled');
+            btn.innerText = "Ads Loading...";
+            timerText.classList.remove('hidden');
+
+            let timeLeft = 30; // ၃၀ စက္ကန့် ကြည့်ခိုင်းမယ် (Profit အတွက် အရေးကြီး)
+            
+            const countdown = setInterval(() => {
+                timeLeft--;
+                timerSec.innerText = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    giveAdPoints();
+                }
+            }, 1000);
+            
+            // ကြော်ငြာ Link အသစ်ကို Browser Tab အသစ်မှာ ဖွင့်ခိုင်းမယ် (ဒါမှ CPM တက်မှာပါ)
+            window.open('https://www.highperformanceformat.com/1f368fdf67bf1944d873877b1354fd14/invoke.js', '_blank');
+        }
+
+        function giveAdPoints() {
+            points += 5;
+            localStorage.setItem('userPoints', points);
+            
+            isWatchingAd = false;
+            const btn = document.getElementById('ad-btn');
+            btn.classList.remove('btn-disabled');
+            btn.innerText = "📺 ကြော်ငြာကြည့်ပြီး Point ယူမည်";
+            document.getElementById('ad-timer-text').classList.add('hidden');
+            
+            updateUI();
+            alert("✅ ကြော်ငြာကြည့်ရှုမှုအောင်မြင်ပါသည်။ +5 Points ရရှိပါပြီ။");
+        }
+
+        // --- Share Logic ---
         async function shareApp() {
             const shareData = {
                 title: 'Daily Wage App',
-                text: 'ဒီ App လေးနဲ့ စာရင်းမှတ်ရတာ အရမ်းလွယ်တယ်။ ဝင်ငွေလည်းရတယ်နော် -',
+                text: 'ငွေစာရင်းမှတ်ရင်း ငွေရှာလို့ရတဲ့ App! ဒေါင်းရန် -',
                 url: 'https://daily-y-app.github.io/Apk-download/'
             };
 
             try {
                 if (navigator.share) {
                     await navigator.share(shareData);
-                    // Point Logic: 1 Invite = 5 Points
-                    data.invites++;
-                    data.points += 5;
-
-                    // Bonus Logic: Every 10 invites = 50 Bonus
-                    if (data.invites % 10 === 0 && data.invites !== 0) {
-                        data.points += 50;
-                        alert("🎉 အောင်မြင်ပါသည်။ သူငယ်ချင်း ၁၀ ယောက်ပြည့်သွားသဖြင့် Bonus 50 Points ရရှိပါသည်!");
+                    // Share ပြီးသွားရင် User က တကယ် Register လုပ်မှ Point ပေးတာ ပိုစိတ်ချရပါတယ်
+                    // ဒါကတော့ UI မှာ Point တက်ပြဖို့ပါ
+                    if(confirm("သူငယ်ချင်းက App သုံးစွဲနေပြီလား?")) {
+                        invites++;
+                        points += 5;
+                        if(invites === 10) points += 50;
+                        localStorage.setItem('userPoints', points);
+                        localStorage.setItem('inviteCount', invites);
+                        updateUI();
                     }
-                    updateUI();
                 }
-            } catch (err) { console.log("Share cancelled"); }
+            } catch (err) {}
         }
-
-        function dailyLogin() {
-            const today = new Date().toDateString();
-            if (data.lastLogin !== today) {
-                data.points += 2;
-                data.lastLogin = today;
-                localStorage.setItem('dw_last_login', today);
-                alert("✅ Daily Bonus +2 Points!");
-                updateUI();
-            } else {
-                alert("မနက်ဖြန်မှ ပြန်လာခဲ့ပါနော်။");
-            }
-        }
-
-        function watchAdTask() {
-            alert("Ads ကြည့်ရှုပြီးပါက 5 Points ရပါမည်။ (Ads Loading...)");
-            // Simulate ad watch time
-            setTimeout(() => {
-                data.points += 5;
-                updateUI();
-                alert("✅ Ads Reward +5 Points!");
-            }, 2000);
-        }
-
-        // Init
-        updateUI();
     </script>
 </body>
 </html>
