@@ -3,106 +3,846 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Wage Share</title>
+    <title>RewardHub - Earn Rewards While You Engage</title>
     <style>
-        body {
-            font-family: sans-serif;
-            text-align: center;
-            padding: 40px 20px;
-            background-color: #f0f2f5;
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
         .container {
+            max-width: 500px;
+            margin: 0 auto;
             background: white;
-            padding: 30px;
-            border-radius: 25px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            max-width: 400px;
-            margin: auto;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
         }
-        /* App Icon ကို ပုံထဲကအတိုင်း ဝိုင်းဝိုင်းလေးဖြစ်အောင် လုပ်ထားတာပါ */
-        .app-icon {
-            width: 120px;
-            height: 120px;
-            border-radius: 30px;
-            object-fit: cover;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        h2 { margin: 10px 0; color: #333; }
-        p { color: #666; line-height: 1.5; margin-bottom: 30px; }
-        
-        /* Share ခလုတ်ကို အစိမ်းရောင်လှလှလေး လုပ်ထားပါတယ် */
-        .btn-share {
-            background-color: #28a745;
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 18px 40px;
-            border: none;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        .content {
+            padding: 40px 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid #e0e7ff;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .conversion-box {
+            background: linear-gradient(135deg, #fff5e6 0%, #ffe6cc 100%);
+            border: 2px solid #ffd699;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .conversion-title {
+            font-size: 0.9rem;
+            color: #b8860b;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .conversion-display {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            transition: 0.3s;
+            gap: 15px;
+            font-size: 1.5rem;
+            font-weight: 700;
         }
-        .btn-share:active { transform: scale(0.95); }
+
+        .conversion-from {
+            color: #667eea;
+        }
+
+        .conversion-arrow {
+            color: #999;
+            font-size: 1.2rem;
+        }
+
+        .conversion-to {
+            color: #28a745;
+        }
+
+        .features-section {
+            margin-bottom: 30px;
+        }
+
+        .features-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+            min-width: 30px;
+        }
+
+        .feature-text {
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        .invite-progress {
+            background: #f0f4ff;
+            border: 2px solid #e0e7ff;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .progress-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e7ff;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 70%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .almost-there {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #856404;
+            font-weight: 600;
+        }
+
+        .milestones {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .milestone {
+            background: #f8f9fa;
+            border: 2px solid #e0e7ff;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .milestone-invites {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .milestone-bonus {
+            font-size: 0.9rem;
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        .invite-code-section {
+            background: #f0f4ff;
+            border: 2px solid #e0e7ff;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .invite-code-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .invite-code-display {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .invite-code-input {
+            flex: 1;
+            padding: 12px;
+            background: white;
+            border: 2px solid #e0e7ff;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-align: center;
+            color: #667eea;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-copy {
+            background: #667eea;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-copy:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        .btn-copy:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: #f0f4ff;
+            color: #667eea;
+            border: 2px solid #667eea;
+            width: 100%;
+            padding: 14px;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e7ff;
+            border-radius: 10px;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            font-family: inherit;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .withdraw-section {
+            background: #f0f4ff;
+            border: 2px solid #e0e7ff;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .withdraw-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .withdraw-info {
+            background: white;
+            border: 2px solid #e0e7ff;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .withdraw-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .withdraw-input-group input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e7ff;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .withdraw-input-group button {
+            padding: 12px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .withdraw-input-group button:hover {
+            background: #764ba2;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e7ff;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #999;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .transaction-info {
+            flex: 1;
+        }
+
+        .transaction-type {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .transaction-date {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .transaction-points {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #28a745;
+        }
+
+        .transaction-points.negative {
+            color: #dc3545;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px 20px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #999;
+            font-size: 0.9rem;
+            border-top: 1px solid #e0e7ff;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .milestones {
+                grid-template-columns: 1fr;
+            }
+
+            .conversion-display {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
     </style>
 </head>
 <body>
-    <script type='text/javascript' src='https://pl28344759.effectivegatecpm.com/eb/25/40/eb25401554277dcd898bb0414f0023b0.js'></script>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎁 RewardHub</h1>
+            <p>Earn Rewards While You Engage</p>
+        </div>
 
-<div class="container">
-    <img src="https://i.postimg.cc/zDKXq9WW/trashed-1770869976-IMG-20260112-174321.png" class="app-icon" alt="Daily Wage Icon">
-    
-    <h2>Daily Wage App</h2>
-    <p>နေ့စဉ်ဝင်ငွေ/ထွက်ငွေ/battle စာရင်းမှတ်တမ်း App <br> (မြန်မာဘာသာဖြင့် အခမဲ့pointရ)</p>
-    
-    <button class="btn-share" onclick="shareApp()">
-        📤 သူငယ်ချင်းများကို မျှဝေပါ
-    </button>
-</div>
+        <!-- Content -->
+        <div class="content">
+            <!-- Home Page -->
+            <div id="homePage" class="page active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="homePoints">0</div>
+                        <div class="stat-label">Your Points</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="homeInvites">0</div>
+                        <div class="stat-label">Friends Invited</div>
+                    </div>
+                </div>
 
-<script>
-function shareApp() {
-    // ရှဲလိုက်ရင် ပေါ်မယ့် စာသားနဲ့ လင့်ခ်
-    const shareData = {
-        title: 'Daily Wage App',
-        text: 'နေ့စဥ်စာရင်းတွေမှတ်ဖို့ တကယ်အသုံးဝင်တဲ့ Daily Wage App လေးပါ။ ဒီမှာ အခမဲ့ဒေါင်းလုဒ်ဆွဲလို့ရတယ်နော် -',
-        url: 'https://daily-y-app.github.io/Apk-download/'
-    };
+                <div class="conversion-box">
+                    <div class="conversion-title">Point Conversion Rate</div>
+                    <div class="conversion-display">
+                        <span class="conversion-from">100 pts</span>
+                        <span class="conversion-arrow">→</span>
+                        <span class="conversion-to">10 Baht</span>
+                    </div>
+                </div>
 
-    if (navigator.share) {
-        navigator.share(shareData)
-            .then(() => console.log('Shared successfully'))
-            .catch((err) => console.log('Error sharing:', err));
-    } else {
-        // HTTPS မဟုတ်ရင် သို့မဟုတ် Browser က Share Support မပေးရင် Link ကို Copy ကူးပေးမယ်
-        const dummy = document.createElement('textarea');
-        document.body.appendChild(dummy);
-        dummy.value = shareData.text + " " + shareData.url;
-        dummy.select();
-        document.execCommand('copy');
-        document.body.removeChild(dummy);
-        alert("Link ကို Copy ကူးပြီးသားဖြစ်၍ မည်သည့်နေရာတွင်မဆို Paste လုပ်ပြီး မျှဝေနိုင်ပါပြီ။");
-    }
-}
-</script>
+                <div class="features-section">
+                    <div class="features-title">How to Earn Points</div>
+                    <div class="feature-item">
+                        <div class="feature-icon">👥</div>
+                        <div class="feature-text"><strong>Invite Friends:</strong> 5 points per invite</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📅</div>
+                        <div class="feature-text"><strong>Daily Login:</strong> 2 points per day</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📺</div>
+                        <div class="feature-text"><strong>Watch Ads:</strong> 3-5 points each</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">✓</div>
+                        <div class="feature-text"><strong>Complete Tasks:</strong> 5-10 points each</div>
+                    </div>
+                </div>
 
-    <div class="ad-banner-footer" style="position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; z-index: 2000; display: flex; justify-content: center; align-items: center; border-top: 1px solid #ddd; padding: 5px 0; box-shadow: 0 -2px 10px rgba(0,0,0,0.1);">
-        <script>
-            atOptions = {
-                'key' : '1f368fdf67bf1944d873877b1354fd14',
-                'format' : 'iframe',
-                'height' : 50,
-                'width' : 320,
-                'params' : {}
-            };
-        </script>
-        <script src="https://www.highperformanceformat.com/1f368fdf67bf1944d873877b1354fd14/invoke.js"></script>
+                <button class="btn btn-primary" onclick="goToInvite()">📤 Start Inviting Friends</button>
+                <button class="btn btn-secondary" onclick="goToDashboard()">📊 View Dashboard</button>
+            </div>
+
+            <!-- Dashboard Page -->
+            <div id="dashboardPage" class="page">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="dashPoints">0</div>
+                        <div class="stat-label">Current Points</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="dashInvites">0</div>
+                        <div class="stat-label">Friends Invited</div>
+                    </div>
+                </div>
+
+                <div class="conversion-box">
+                    <div class="conversion-title">Your Balance in Baht</div>
+                    <div class="conversion-display">
+                        <span class="conversion-to" id="bahtValue">0 Baht</span>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('overview')">Overview</button>
+                    <button class="tab-btn" onclick="switchTab('history')">History</button>
+                </div>
+
+                <!-- Overview Tab -->
+                <div id="overviewTab" class="tab-content active">
+                    <div class="invite-code-section">
+                        <div class="invite-code-title">Your Invite Code</div>
+                        <div class="invite-code-display">
+                            <input type="text" id="inviteCode" class="invite-code-input" readonly>
+                            <button class="btn-copy" onclick="copyCode()">Copy</button>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">⚡</div>
+                        <div class="feature-text" onclick="watchAds()"><strong>Watch Ads</strong> - Earn 3-5 points</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">✓</div>
+                        <div class="feature-text" onclick="completeTask()"><strong>Complete Task</strong> - Earn 5-10 points</div>
+                    </div>
+                </div>
+
+                <!-- History Tab -->
+                <div id="historyTab" class="tab-content">
+                    <div id="transactionList">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📋</div>
+                            <p>No transactions yet</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="goToInvite()">📤 Invite More Friends</button>
+                <button class="btn btn-secondary" onclick="goToHome()">← Back to Home</button>
+            </div>
+
+            <!-- Invite Page -->
+            <div id="invitePage" class="page">
+                <div class="invite-progress">
+                    <div class="progress-title">👥 Your Invite Progress</div>
+                    <div class="progress-text">Reach milestones to unlock bonus rewards</div>
+                    <div class="progress-info">
+                        <span id="progressText">0/10 friends</span>
+                        <span id="progressPercent">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div id="almostThere" class="almost-there" style="display: none;">
+                        <span>⚡</span>
+                        <span>Almost there! Just a few more invites!</span>
+                    </div>
+                </div>
+
+                <div class="milestones">
+                    <div class="milestone">
+                        <div class="milestone-invites">10</div>
+                        <div class="milestone-bonus">+50 pts</div>
+                    </div>
+                    <div class="milestone">
+                        <div class="milestone-invites">20</div>
+                        <div class="milestone-bonus">+200 pts</div>
+                    </div>
+                    <div class="milestone">
+                        <div class="milestone-invites">50</div>
+                        <div class="milestone-bonus">+700 pts</div>
+                    </div>
+                </div>
+
+                <div class="invite-code-section">
+                    <div class="invite-code-title">🔗 Share Your Invite Code</div>
+                    <div class="invite-code-display">
+                        <input type="text" id="shareCode" class="invite-code-input" readonly>
+                        <button class="btn-copy" onclick="shareCode()">Share</button>
+                    </div>
+                </div>
+
+                <div class="invite-code-section">
+                    <div class="invite-code-title">Enter Friend's Invite Code</div>
+                    <input type="text" id="friendCode" class="input-field" placeholder="Enter invite code (e.g., ABC12345)" maxlength="10">
+                    <button class="btn btn-primary" onclick="applyFriendCode()">Apply Code</button>
+                </div>
+
+                <button class="btn btn-secondary" onclick="goToDashboard()">← Back to Dashboard</button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>💰 100 pts = 10 Baht | Minimum withdrawal: 1000 points</p>
+            <p style="margin-top: 10px; font-size: 0.85rem;">© 2026 RewardHub. All rights reserved.</p>
+        </div>
     </div>
+
+    <script>
+        // ===== State Management =====
+        let userData = {
+            points: 1250,
+            invites: 7,
+            inviteCode: generateCode(),
+            transactions: [
+                { type: 'Invite Reward', points: 5, date: 'Today' },
+                { type: 'Daily Login', points: 2, date: 'Yesterday' },
+                { type: 'Watch Ads', points: 4, date: '2 days ago' }
+            ]
+        };
+
+        // ===== Utility Functions =====
+        function generateCode() {
+            return 'CODE' + Math.random().toString(36).substr(2, 6).toUpperCase();
+        }
+
+        function showNotification(msg) {
+            alert(msg);
+        }
+
+        function goToPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            updateDisplay();
+        }
+
+        function goToHome() {
+            goToPage('homePage');
+        }
+
+        function goToDashboard() {
+            goToPage('dashboardPage');
+        }
+
+        function goToInvite() {
+            goToPage('invitePage');
+        }
+
+        function updateDisplay() {
+            // Update all displays
+            document.getElementById('homePoints').textContent = userData.points;
+            document.getElementById('homeInvites').textContent = userData.invites;
+            document.getElementById('dashPoints').textContent = userData.points;
+            document.getElementById('dashInvites').textContent = userData.invites;
+            document.getElementById('bahtValue').textContent = Math.floor(userData.points / 10) + ' Baht';
+            document.getElementById('inviteCode').value = userData.inviteCode;
+            document.getElementById('shareCode').value = userData.inviteCode;
+
+            // Update progress
+            const nextMilestone = userData.invites >= 50 ? 50 : (userData.invites >= 20 ? 20 : 10);
+            const progress = Math.min((userData.invites / nextMilestone) * 100, 100);
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = userData.invites + '/' + nextMilestone + ' friends';
+            document.getElementById('progressPercent').textContent = Math.round(progress) + '%';
+
+            // Show "Almost there!" notification
+            const almostThere = document.getElementById('almostThere');
+            if (userData.invites >= nextMilestone - 3 && userData.invites < nextMilestone) {
+                almostThere.style.display = 'flex';
+            } else {
+                almostThere.style.display = 'none';
+            }
+
+            // Update transaction history
+            updateTransactions();
+        }
+
+        function updateTransactions() {
+            const list = document.getElementById('transactionList');
+            if (userData.transactions.length === 0) {
+                list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📋</div><p>No transactions yet</p></div>';
+                return;
+            }
+
+            list.innerHTML = userData.transactions.map((tx, idx) => `
+                <div class="transaction-item">
+                    <div class="transaction-info">
+                        <div class="transaction-type">${tx.type}</div>
+                        <div class="transaction-date">${tx.date}</div>
+                    </div>
+                    <div class="transaction-points">${tx.points > 0 ? '+' : ''}${tx.points}</div>
+                </div>
+            `).join('');
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabName + 'Tab').classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function copyCode() {
+            const code = document.getElementById('inviteCode').value;
+            navigator.clipboard.writeText(code).then(() => {
+                showNotification('Invite code copied!');
+            });
+        }
+
+        function shareCode() {
+            const code = document.getElementById('shareCode').value;
+            if (navigator.share) {
+                navigator.share({
+                    title: 'RewardHub',
+                    text: 'Join RewardHub and earn rewards! Use my code: ' + code,
+                    url: window.location.href
+                });
+            } else {
+                navigator.clipboard.writeText(code);
+                showNotification('Code copied! Share it with your friends!');
+            }
+        }
+
+        function applyFriendCode() {
+            const code = document.getElementById('friendCode').value.trim().toUpperCase();
+            if (!code) {
+                showNotification('Please enter a code');
+                return;
+            }
+            if (code === userData.inviteCode) {
+                showNotification('Cannot use your own code!');
+                return;
+            }
+            userData.points += 5;
+            userData.transactions.unshift({ type: 'Invite Code Used', points: 5, date: 'Today' });
+            document.getElementById('friendCode').value = '';
+            updateDisplay();
+            showNotification('Code applied! +5 points earned!');
+        }
+
+        function watchAds() {
+            const points = Math.floor(Math.random() * 3) + 3;
+            userData.points += points;
+            userData.transactions.unshift({ type: 'Watch Ads', points: points, date: 'Today' });
+            updateDisplay();
+            showNotification('+' + points + ' points earned!');
+        }
+
+        function completeTask() {
+            const points = Math.floor(Math.random() * 6) + 5;
+            userData.points += points;
+            userData.transactions.unshift({ type: 'Complete Task', points: points, date: 'Today' });
+            updateDisplay();
+            showNotification('+' + points + ' points earned!');
+        }
+
+        // Initialize
+        updateDisplay();
+    </script>
+
+    <!-- Ad Scripts (Optional) -->
+    <script type='text/javascript' src='https://pl28344759.effectivegatecpm.com/eb/25/40/eb25401554277dcd898bb0414f0023b0.js'></script>
 </body>
 </html>
