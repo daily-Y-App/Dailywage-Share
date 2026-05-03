@@ -3,74 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Wage - Secure Rewards</title>
+    <title>Daily Wage - Earn Rewards</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     
-    <script type='text/javascript' src='https://pl28344759.effectivegatecpm.com/eb/25/40/eb25401554277dcd898bb0414f0023b0.js'></script>
-
     <style>
-        body { font-family: sans-serif; background-color: #f9fafb; }
-        .secure-card { background: white; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        .glass-card { background: white; border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .progress-bar-fill { transition: width 0.5s ease-in-out; }
     </style>
 </head>
-<body class="pb-24">
+<body class="pb-32">
 
-    <nav class="sticky top-0 bg-white border-b p-4 flex justify-between items-center z-50">
+    <nav class="sticky top-0 bg-white border-b border-gray-200 p-4 shadow-sm z-40 flex justify-between items-center">
         <div class="flex items-center gap-2">
-            <img src="https://i.postimg.cc/XY0Y8ncq/1772256032115.png" class="w-8 h-8 rounded-lg" alt="logo">
-            <span class="font-bold">Daily Wage</span>
+            <div class="bg-green-100 p-2 rounded-lg text-lg">💰</div>
+            <div>
+                <h1 class="font-bold text-gray-800 text-sm">Daily Wage</h1>
+                <p class="text-[10px] text-gray-500">100 Pts = 10 Baht</p>
+            </div>
         </div>
-        <div class="bg-yellow-100 text-yellow-700 px-4 py-1 rounded-full font-bold">
-            <span id="display-pts">0</span> Pts
+        <div class="text-right">
+            <div class="text-green-600 font-extrabold text-xl"><span id="user-points">0</span> <span class="text-xs">PTS</span></div>
+            <div class="text-[11px] text-gray-500 font-bold">฿ <span id="user-baht">0.00</span></div>
         </div>
     </nav>
 
-    <main class="max-w-md mx-auto p-4 space-y-6">
+    <main class="max-w-md mx-auto p-4 space-y-5 mt-2">
 
-        <div class="secure-card p-6 text-center">
-            <p class="text-gray-500 text-sm">လက်ရှိလက်ကျန်ငွေ</p>
-            <h1 class="text-4xl font-extrabold text-gray-800 my-2">฿ <span id="display-baht">0.00</span></h1>
-            <p class="text-[10px] text-gray-400">100 Points = 10 Baht</p>
-        </div>
-
-        <div class="secure-card p-5">
-            <h3 class="font-bold mb-4">Points ရှာရန်</h3>
-            
-            <div class="flex items-center justify-between p-4 bg-blue-50 rounded-xl border border-blue-100 mb-3">
-                <div>
-                    <p class="font-bold text-blue-800">Watch & Click Ad</p>
-                    <p class="text-[10px] text-blue-600">ကြော်ငြာကိုနှိပ်ပြီး ၃၀ စက္ကန့်ကြည့်ပါ</p>
-                </div>
-                <button onclick="handleAdClick()" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-xs font-bold active:scale-95">
-                    +5 PTS
-                </button>
+        <section class="glass-card p-4 flex justify-between items-center border border-gray-100">
+            <div>
+                <h3 class="font-bold text-gray-800 text-sm">နေ့စဉ်ဝင်ရောက်ခြင်း</h3>
+                <p class="text-[10px] text-gray-500">နေ့တိုင်း Login ဝင်ပြီး အခမဲ့ယူပါ</p>
             </div>
-
-            <button onclick="shareApp()" class="w-full py-4 border-2 border-dashed border-green-300 text-green-700 rounded-xl font-bold hover:bg-green-50 transition-all">
-                📤 သူငယ်ချင်းဖိတ်ခေါ်မည် (+5 Pts)
+            <button id="btn-daily" onclick="claimDaily()" class="bg-blue-600 text-white text-xs font-bold px-4 py-2 rounded-lg active:scale-95 transition-transform">
+                +2 Pts ယူမည်
             </button>
-        </div>
+        </section>
 
-        <div class="flex justify-center my-4 overflow-hidden rounded-lg">
-             <div id="container-0c2b6d3f941113823d5379a543284bf7">
-                <script async="async" data-cfasync="false" src="https://pl28343177.profitablecpmratenetwork.com/0c2b6d3f941113823d5379a543284bf7/invoke.js"></script>
-             </div>
-        </div>
+        <section class="glass-card p-5 border border-gray-100 relative overflow-hidden">
+            <h3 class="font-bold text-gray-800 mb-2">👥 သူငယ်ချင်းဖိတ်ခေါ်မည်</h3>
+            <p class="text-xs text-gray-500 mb-4">သင့် Invite Code ကို သူငယ်ချင်းများထည့်သွင်းတိုင်း Point ရပါမည်။</p>
+            
+            <div class="bg-green-50 border border-green-200 rounded-xl p-3 mb-4 flex justify-between items-center">
+                <span class="text-xs text-green-700 font-semibold">သင့် Invite Code:</span>
+                <span id="my-invite-code" class="font-mono font-bold text-lg text-green-800 tracking-wider">------</span>
+            </div>
 
-        <div class="secure-card p-5">
-            <h3 class="font-bold mb-4">ငွေထုတ်ယူရန်</h3>
-            <div class="space-y-3">
-                <button onclick="processWithdraw(1000)" class="w-full flex justify-between items-center p-4 bg-gray-50 rounded-xl border hover:border-orange-400 transition-all">
-                    <span class="font-bold">TrueMoney (100 Baht)</span>
-                    <span class="text-xs text-orange-600">1000 Points</span>
+            <div class="mb-4">
+                <div class="flex justify-between text-xs font-bold mb-1">
+                    <span class="text-gray-700">Invite 10 Friends → Earn 10 Baht</span>
+                    <span id="invite-progress-text" class="text-green-600">0/10</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div id="invite-progress-bar" class="bg-green-500 h-2.5 rounded-full progress-bar-fill" style="width: 0%"></div>
+                </div>
+                <p id="almost-there-msg" class="text-[10px] text-orange-500 font-semibold mt-1 hidden">🔥 Almost there! နည်းနည်းပဲလိုတော့တယ်!</p>
+            </div>
+
+            <button onclick="shareInviteCode()" class="w-full bg-green-600 text-white font-bold py-3 rounded-xl shadow-md active:scale-95 transition-transform text-sm mb-4">
+                🚀 သူငယ်ချင်းများကို ဖိတ်ခေါ်မည်
+            </button>
+
+            <div class="border-t pt-4">
+                <p class="text-[11px] text-gray-500 mb-2 font-semibold">သူငယ်ချင်း၏ Invite Code ထည့်ရန် (တစ်ကြိမ်သာရမည်)</p>
+                <div class="flex gap-2">
+                    <input type="text" id="friend-code-input" placeholder="Enter Code" class="flex-1 bg-gray-50 border rounded-lg px-3 text-sm font-mono uppercase" maxlength="6">
+                    <button id="btn-submit-code" onclick="submitFriendCode()" class="bg-gray-800 text-white text-xs px-4 rounded-lg font-bold">အတည်ပြု</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card p-5 border border-gray-100">
+            <h3 class="font-bold text-gray-800 mb-1">📺 ကြော်ငြာကြည့်ရန်</h3>
+            <p class="text-xs text-gray-500 mb-4">ကြော်ငြာကို အချိန်ပြည့်ကြည့်ပါက Point ရပါမည်။</p>
+            
+            <button onclick="openAdModal()" class="w-full flex items-center justify-between bg-orange-50 border border-orange-200 p-4 rounded-xl active:scale-95 transition-transform">
+                <div class="text-left">
+                    <span class="block font-bold text-orange-800 text-sm">Watch Video Ad</span>
+                    <span class="text-[10px] text-orange-600">အချိန်ပြည့်သည်အထိ ကြည့်ပေးပါ။</span>
+                </div>
+                <div class="bg-orange-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm">+5 Pts</div>
+            </button>
+        </section>
+
+        <section class="glass-card p-5 border border-gray-100">
+            <h3 class="font-bold text-gray-800 mb-3">💸 ငွေထုတ်ယူရန်</h3>
+            <div class="bg-gray-50 border rounded-xl p-4">
+                <div class="flex items-center gap-3 mb-4">
+                    <img src="https://www.truemoney.com/wp-content/uploads/2020/12/logo-truemoney-wallet-2020.png" alt="TrueMoney" class="h-6">
+                    <div>
+                        <p class="text-sm font-bold">TrueMoney Wallet</p>
+                        <p class="text-[10px] text-gray-500">Minimum: 1000 Pts (100 Baht)</p>
+                    </div>
+                </div>
+                <button onclick="requestWithdraw()" class="w-full bg-gray-800 text-white font-bold py-3 rounded-xl text-sm active:scale-95 transition-transform">
+                    ငွေထုတ်မည်
                 </button>
             </div>
-            <p id="error-msg" class="text-center text-red-500 text-[11px] mt-2 hidden">Point မလုံလောက်ပါ!</p>
-        </div>
-
+        </section>
     </main>
 
-    <div class="fixed bottom-0 w-full bg-white border-t p-2 flex justify-center">
+    <div id="ad-modal" class="fixed inset-0 bg-black z-[100] flex flex-col justify-center items-center hidden">
+        <div class="absolute top-0 w-full p-4 flex justify-between items-center text-white bg-black/50 z-10">
+            <span class="text-sm font-bold">Advertisement</span>
+            <div class="flex items-center gap-2">
+                <span id="ad-timer" class="bg-gray-800 px-3 py-1 rounded-full text-xs font-bold">30s</span>
+                <button id="ad-close-btn" onclick="closeAdAndReward()" class="bg-red-500 w-8 h-8 rounded-full font-bold hidden flex justify-center items-center">✕</button>
+            </div>
+        </div>
+
+        <div class="w-full max-w-md bg-white p-2 rounded-lg text-center mx-4">
+            <p class="text-xs text-gray-400 mb-2">Ad is loading...</p>
+            <div id="container-0c2b6d3f941113823d5379a543284bf7">
+                <script async="async" data-cfasync="false" src="https://pl28343177.profitablecpmratenetwork.com/0c2b6d3f941113823d5379a543284bf7/invoke.js"></script>
+            </div>
+            <div class="h-40 bg-gray-100 flex items-center justify-center mt-2 border border-dashed text-gray-400 text-xs">
+                (Ad Space Simulation)
+            </div>
+        </div>
+        <p class="text-white text-xs mt-4">ကျေးဇူးပြု၍ စောင့်ပေးပါ။ အချိန်ပြည့်လျှင် အမှားခြစ် (X) ပေါ်လာပါမည်။</p>
+    </div>
+
+    <div class="fixed bottom-0 w-full bg-white border-t py-1 flex flex-col items-center z-40">
+        <span class="text-[8px] text-gray-400">SPONSORED</span>
         <script>
             atOptions = { 'key' : '1f368fdf67bf1944d873877b1354fd14', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
         </script>
@@ -78,70 +134,177 @@
     </div>
 
     <script>
-        // Data Management
-        let points = parseInt(localStorage.getItem('user_pts_secure')) || 0;
+        // System Data Initialization
+        let points = parseInt(localStorage.getItem('dw_points')) || 0;
+        let invites = parseInt(localStorage.getItem('dw_invites')) || 0;
+        let myCode = localStorage.getItem('dw_my_code');
+        let codeEntered = localStorage.getItem('dw_code_entered') === 'true';
+        let lastLogin = localStorage.getItem('dw_last_login');
 
-        function updateUI() {
-            document.getElementById('display-pts').innerText = points;
-            document.getElementById('display-baht').innerText = (points / 10).toFixed(2);
-            localStorage.setItem('user_pts_secure', points);
-        }
-        updateUI();
-
-        // 1. Fix Ad Issue (Click to earn)
-        function handleAdClick() {
-            // User ကို Ad ပွင့်မယ့် link ဆီ ပို့လိုက်မယ်
-            // ဒီနေရာမှာ လူကြီးမင်းရဲ့ Direct Ad Link ရှိရင် ပိုကောင်းပါတယ်
-            window.open('https://www.highperformanceformat.com/1f368fdf67bf1944d873877b1354fd14/invoke.js', '_blank');
-            
-            alert("ကြော်ငြာပွင့်လာပါပြီ။ အထဲမှာ ၃၀ စက္ကန့်နေပေးမှ Point ရပါမည်။");
-
-            // တကယ် Ad ထဲမှာ နေမနေ စစ်ဖို့ ခက်ပေမယ့် User ကို ချက်ချင်း point မပေးဘဲ စောင့်ခိုင်းမယ်
-            setTimeout(() => {
-                const confirmed = confirm("ကြော်ငြာကြည့်ပြီးပါပြီလား?");
-                if(confirmed) {
-                    points += 5;
-                    updateUI();
-                    alert("✅ +5 Points ရရှိပါပြီ!");
-                }
-            }, 15000); // ၁၅ စက္ကန့် စောင့်ခိုင်းထားပါတယ်
+        // Generate Invite Code on first load
+        if (!myCode) {
+            myCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+            localStorage.setItem('dw_my_code', myCode);
         }
 
-        // 2. Withdraw Logic (Point နုတ်တဲ့စနစ်)
-        function processWithdraw(cost) {
-            const errorMsg = document.getElementById('error-msg');
+        // Initialize UI
+        function updateDashboard() {
+            document.getElementById('user-points').innerText = points;
+            document.getElementById('user-baht').innerText = (points / 10).toFixed(2);
+            document.getElementById('my-invite-code').innerText = myCode;
+
+            // Invite Progress Logic (10 per cycle)
+            let cycleInvites = invites % 10; 
+            if (invites > 0 && cycleInvites === 0) cycleInvites = 10; // Show 10/10 fully before resetting visually
             
-            if (points >= cost) {
-                const phone = prompt("TrueMoney Wallet နံပါတ်ရိုက်ထည့်ပါ:");
-                if (phone && phone.length >= 9) {
-                    // အရေးကြီးဆုံးနေရာ - Point နုတ်လိုက်ပြီ
-                    points -= cost; 
-                    updateUI();
-                    
-                    errorMsg.classList.add('hidden');
-                    alert(`အောင်မြင်ပါသည်။ ฿${cost/10} ထုတ်ယူရန် စာရင်းသွင်းပြီးပါပြီ။\nလက်ကျန် Point: ${points}`);
-                } else {
-                    alert("ဖုန်းနံပါတ် မှားယွင်းနေပါသည်။");
-                }
+            document.getElementById('invite-progress-text').innerText = `${cycleInvites}/10`;
+            document.getElementById('invite-progress-bar').style.width = `${(cycleInvites / 10) * 100}%`;
+
+            // Almost there notification
+            const almostMsg = document.getElementById('almost-there-msg');
+            if (cycleInvites >= 7 && cycleInvites < 10) {
+                almostMsg.classList.remove('hidden');
             } else {
-                errorMsg.classList.remove('hidden');
-                setTimeout(() => errorMsg.classList.add('hidden'), 3000);
+                almostMsg.classList.add('hidden');
+            }
+
+            // Lock Input if code already entered
+            if (codeEntered) {
+                const inputBtn = document.getElementById('btn-submit-code');
+                const inputField = document.getElementById('friend-code-input');
+                inputBtn.innerText = "ထည့်သွင်းပြီး";
+                inputBtn.classList.replace('bg-gray-800', 'bg-gray-400');
+                inputField.disabled = true;
+                inputBtn.disabled = true;
+            }
+
+            // Check Daily Login
+            if (lastLogin === new Date().toDateString()) {
+                const dBtn = document.getElementById('btn-daily');
+                dBtn.innerText = "ရယူပြီးပါပြီ";
+                dBtn.classList.replace('bg-blue-600', 'bg-gray-400');
+                dBtn.disabled = true;
+            }
+
+            // Save state
+            localStorage.setItem('dw_points', points);
+            localStorage.setItem('dw_invites', invites);
+        }
+
+        updateDashboard();
+
+        // 1. Daily Login
+        function claimDaily() {
+            const today = new Date().toDateString();
+            if (lastLogin !== today) {
+                points += 2;
+                lastLogin = today;
+                localStorage.setItem('dw_last_login', lastLogin);
+                updateDashboard();
+                alert("🎉 နေ့စဉ် Login အတွက် +2 PTS ရရှိပါသည်!");
             }
         }
 
-        // 3. Share Logic
-        async function shareApp() {
-            try {
-                await navigator.share({
-                    title: 'Daily Wage App',
-                    url: 'https://daily-y-app.github.io/Apk-download/'
-                });
-                // Share ပြီးရင်လည်း တန်းမပေးဘဲ အတည်ပြုခိုင်းမယ်
-                points += 5;
-                updateUI();
-            } catch (err) {}
+        // 2. Share Invite Code
+        async function shareInviteCode() {
+            const shareText = `Daily Wage App တွင် ငွေရှာကြစို့! 
+ကျနော့်ရဲ့ Invite Code [ ${myCode} ] ကို ထည့်သွင်းပြီး အခမဲ့ Point များရယူပါ။ 
+ဒေါင်းလုဒ်လင့်ခ်: https://daily-y-app.github.io/Apk-download/`;
+
+            if (navigator.share) {
+                try {
+                    await navigator.share({ title: 'Daily Wage Invite', text: shareText });
+                } catch (err) {}
+            } else {
+                navigator.clipboard.writeText(shareText);
+                alert("Invite Code ကို Copy ကူးပြီးပါပြီ! သူငယ်ချင်းများထံ ပို့ပေးပါ။");
+            }
+        }
+
+        // 3. Submit Friend's Code (Anti-Cheat basic logic)
+        function submitFriendCode() {
+            if (codeEntered) return;
+            const input = document.getElementById('friend-code-input').value.trim().toUpperCase();
+            
+            if (input === myCode) {
+                alert("မိမိ၏ Code ကို မိမိပြန်ထည့်၍ မရပါ။");
+                return;
+            }
+            if (input.length === 6) {
+                // In a real app, this sends request to server to give inviter points.
+                // We simulate the current user getting a small bonus for entering code.
+                codeEntered = true;
+                localStorage.setItem('dw_code_entered', 'true');
+                points += 5; // Reward for user who enters code
+                
+                // Simulate "Inviter" logic (Local simulation only)
+                addInviteSimulation(); 
+
+                updateDashboard();
+                alert("✅ Invite Code ထည့်သွင်းအောင်မြင်ပါသည်။ သင့်အတွက် +5 PTS ရရှိပါပြီ!");
+            } else {
+                alert("Invite Code မှားယွင်းနေပါသည်။ (၆ လုံး ပြည့်အောင်ထည့်ပါ)");
+            }
+        }
+
+        function addInviteSimulation() {
+            invites++;
+            points += 5; // Base 5 Pts
+            
+            // Tiered Growth Boost Check
+            if (invites % 10 === 0 && invites < 20) { points += 50; alert("🎁 10 ယောက်ပြည့် Bonus +50 PTS ရပါပြီ!"); }
+            if (invites === 20) { points += 200; alert("🚀 20 ယောက်ပြည့် Mega Bonus +200 PTS!"); }
+            if (invites === 50) { points += 700; alert("🔥 50 ယောက်ပြည့် Super Bonus +700 PTS!"); }
+
+            updateDashboard();
+        }
+
+        // 4. Secure Watch Ad Logic
+        let adTimerInterval;
+        let adTimeLeft = 30; // 30 seconds wait
+
+        function openAdModal() {
+            document.getElementById('ad-modal').classList.remove('hidden');
+            document.getElementById('ad-close-btn').classList.add('hidden');
+            adTimeLeft = 30;
+            document.getElementById('ad-timer').innerText = adTimeLeft + "s";
+            document.getElementById('ad-timer').classList.remove('hidden');
+
+            // Timer Logic
+            adTimerInterval = setInterval(() => {
+                adTimeLeft--;
+                document.getElementById('ad-timer').innerText = adTimeLeft + "s";
+                
+                if (adTimeLeft <= 0) {
+                    clearInterval(adTimerInterval);
+                    document.getElementById('ad-timer').classList.add('hidden');
+                    document.getElementById('ad-close-btn').classList.remove('hidden'); // Show Close (X) button
+                }
+            }, 1000);
+        }
+
+        function closeAdAndReward() {
+            document.getElementById('ad-modal').classList.add('hidden');
+            points += 5;
+            updateDashboard();
+            alert("✅ ကြော်ငြာကြည့်ရှုခြင်း ပြီးဆုံးပါပြီ။ +5 PTS ရရှိပါသည်။");
+        }
+
+        // 5. Withdraw System Logic
+        function requestWithdraw() {
+            if (points >= 1000) {
+                const phone = prompt("TrueMoney Wallet ဖုန်းနံပါတ် ရိုက်ထည့်ပါ (ဥပမာ- 0812345678):");
+                if (phone && phone.length >= 9) {
+                    points -= 1000; // Deduct exactly 1000 pts (100 Baht)
+                    updateDashboard();
+                    alert(`✅ အောင်မြင်ပါသည်။ သင့် TrueMoney ${phone} သို့ 100 Baht လွှဲပေးရန် စာရင်းတင်ပြီးပါပြီ။`);
+                } else {
+                    alert("ဖုန်းနံပါတ် မှားယွင်းနေပါသည်။ ပြန်လည်စစ်ဆေးပါ။");
+                }
+            } else {
+                alert(`ငွေထုတ်ရန် Point မလုံလောက်ပါ။ 1000 PTS ပြည့်ရန် ${1000 - points} PTS လိုပါသေးသည်။`);
+            }
         }
     </script>
 </body>
 </html>
-
