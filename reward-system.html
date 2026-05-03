@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RewardHub - Earn Rewards While You Engage</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">RewardHub</div>
+                <button class="btn btn-outline" id="authBtn">Sign In</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="mainContent">
+        <!-- Home Page -->
+        <div id="homePage" class="page active">
+            <!-- Hero Section -->
+            <section class="hero">
+                <div class="container">
+                    <div class="hero-content">
+                        <h1 class="gradient-text">Earn Rewards While You Engage</h1>
+                        <p class="hero-subtitle">Join our community and start earning points through invites, daily logins, tasks, and more. Convert your points to real rewards.</p>
+                        <div class="hero-buttons">
+                            <button class="btn btn-primary" id="getStartedBtn">Get Started</button>
+                            <button class="btn btn-outline" onclick="document.getElementById('features').scrollIntoView({behavior: 'smooth'})">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Section -->
+            <section id="features" class="features">
+                <div class="container">
+                    <h2 class="section-title gradient-text">How It Works</h2>
+                    <div class="features-grid">
+                        <!-- Feature 1 -->
+                        <div class="feature-card">
+                            <div class="feature-icon invite-icon">🎁</div>
+                            <h3>Invite Friends</h3>
+                            <p>Share your unique code and earn 5 points per invite. Unlock milestone bonuses at 10, 20, and 50 invites.</p>
+                        </div>
+
+                        <!-- Feature 2 -->
+                        <div class="feature-card">
+                            <div class="feature-icon trending-icon">📈</div>
+                            <h3>Daily Rewards</h3>
+                            <p>Log in every day to earn 2 points. Build your streak and watch your points grow consistently.</p>
+                        </div>
+
+                        <!-- Feature 3 -->
+                        <div class="feature-card">
+                            <div class="feature-icon tasks-icon">⚡</div>
+                            <h3>Tasks & Ads</h3>
+                            <p>Complete tasks (5-10 pts) and watch ads (3-5 pts) to earn additional rewards throughout the day.</p>
+                        </div>
+
+                        <!-- Feature 4 -->
+                        <div class="feature-card">
+                            <div class="feature-icon leaderboard-icon">👥</div>
+                            <h3>Leaderboard</h3>
+                            <p>Compete with other users on our weekly leaderboard and earn exclusive bonuses for top performers.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Conversion Section -->
+            <section class="conversion">
+                <div class="container">
+                    <div class="conversion-card">
+                        <h2 class="gradient-text">Convert Points to Real Rewards</h2>
+                        <div class="conversion-display">
+                            <span class="conversion-from">100 pts</span>
+                            <span class="conversion-arrow">→</span>
+                            <span class="conversion-to">10 Baht</span>
+                        </div>
+                        <p>Minimum withdrawal: 1,000 points (100 Baht). Your points are always secure and ready to withdraw.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA Section -->
+            <section class="cta">
+                <div class="container">
+                    <h2 class="gradient-text">Ready to Start Earning?</h2>
+                    <p>Join thousands of users who are already earning rewards. Sign up now and get started!</p>
+                    <button class="btn btn-primary btn-large" id="signupBtn">Sign Up Now</button>
+                </div>
+            </section>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div id="dashboardPage" class="page">
+            <div class="container">
+                <!-- Header -->
+                <div class="page-header">
+                    <h1 class="gradient-text">Reward System</h1>
+                    <p id="welcomeText">Welcome back!</p>
+                </div>
+
+                <!-- Main Stats -->
+                <div class="stats-grid">
+                    <!-- Points Card -->
+                    <div class="stat-card">
+                        <div class="stat-icon">🎁</div>
+                        <h3>Current Points</h3>
+                        <div class="stat-value" id="pointsDisplay">0</div>
+                        <p class="stat-subtitle">100 pts = 10 Baht</p>
+                    </div>
+
+                    <!-- Invites Card -->
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <h3>Friends Invited</h3>
+                        <div class="stat-value" id="invitesDisplay">0</div>
+                        <p class="stat-subtitle">Active referrals</p>
+                    </div>
+
+                    <!-- Streak Card -->
+                    <div class="stat-card">
+                        <div class="stat-icon">📈</div>
+                        <h3>Login Streak</h3>
+                        <div class="stat-value" id="streakDisplay">0</div>
+                        <p class="stat-subtitle">Days in a row</p>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="tabs">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" onclick="switchTab('overview')">Overview</button>
+                        <button class="tab-btn" onclick="switchTab('history')">History</button>
+                        <button class="tab-btn" onclick="switchTab('leaderboard')">Leaderboard</button>
+                    </div>
+
+                    <!-- Overview Tab -->
+                    <div id="overviewTab" class="tab-content active">
+                        <!-- Quick Actions -->
+                        <div class="card">
+                            <h3>Quick Actions</h3>
+                            <p class="card-subtitle">Earn more points with these activities</p>
+                            <div class="action-buttons">
+                                <button class="btn btn-action" onclick="watchAds()">
+                                    📺 Watch Ads (3-5 pts)
+                                </button>
+                                <button class="btn btn-action" onclick="completeTask()">
+                                    ✓ Complete Tasks (5-10 pts)
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Invite Code -->
+                        <div class="card">
+                            <h3>Your Invite Code</h3>
+                            <p class="card-subtitle">Share this code to earn rewards</p>
+                            <div class="invite-code-display">
+                                <input type="text" id="inviteCodeInput" readonly class="invite-code-input">
+                                <button class="btn btn-small" onclick="copyInviteCode()">Copy</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- History Tab -->
+                    <div id="historyTab" class="tab-content">
+                        <div class="card">
+                            <h3>📋 Transaction History</h3>
+                            <p class="card-subtitle">Your recent points activity</p>
+                            <div id="transactionList" class="transaction-list">
+                                <p class="empty-state">No transactions yet</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Leaderboard Tab -->
+                    <div id="leaderboardTab" class="tab-content">
+                        <div class="card">
+                            <h3>🏆 Weekly Top Inviters</h3>
+                            <p class="card-subtitle">This week's top performers</p>
+                            <div id="leaderboardList" class="leaderboard-list">
+                                <p class="empty-state">No leaderboard data yet</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logout Button -->
+                <div class="logout-section">
+                    <button class="btn btn-outline" onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Invite Page -->
+        <div id="invitePage" class="page">
+            <div class="container max-width-2xl">
+                <!-- Header -->
+                <div class="page-header">
+                    <h1 class="gradient-text">Invite Friends</h1>
+                    <p>Earn rewards by inviting your friends to join</p>
+                </div>
+
+                <!-- Invite Progress Card -->
+                <div class="card">
+                    <h3>👥 Your Invite Progress</h3>
+                    <p class="card-subtitle">Reach milestones to unlock bonus rewards</p>
+
+                    <!-- Progress Bar -->
+                    <div class="progress-section">
+                        <div class="progress-header">
+                            <span id="progressText">0/10 friends invited</span>
+                            <span id="progressPercent">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="progressFill" class="progress-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Almost There Notification -->
+                    <div id="almostThereNotif" class="notification" style="display: none;">
+                        <span class="notif-icon">⚡</span>
+                        <div>
+                            <p class="notif-title">Almost there!</p>
+                            <p class="notif-text" id="almostThereText">Just a few more invites to reach the next milestone!</p>
+                        </div>
+                    </div>
+
+                    <!-- Milestones -->
+                    <div class="milestones-grid">
+                        <div class="milestone">
+                            <p class="milestone-label">10 Invites</p>
+                            <p class="milestone-reward">+50 pts</p>
+                        </div>
+                        <div class="milestone">
+                            <p class="milestone-label">20 Invites</p>
+                            <p class="milestone-reward">+200 pts</p>
+                        </div>
+                        <div class="milestone">
+                            <p class="milestone-label">50 Invites</p>
+                            <p class="milestone-reward">+700 pts</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Share Your Code -->
+                <div class="card">
+                    <h3>🔗 Share Your Invite Code</h3>
+                    <p class="card-subtitle">Give this code to your friends</p>
+                    <div class="invite-code-display">
+                        <input type="text" id="shareCodeInput" readonly class="invite-code-input">
+                        <button class="btn btn-primary" onclick="copyShareCode()">Copy</button>
+                    </div>
+                    <p class="info-text">Each successful invite earns you <span class="highlight">5 points</span></p>
+                </div>
+
+                <!-- Enter Friend's Code -->
+                <div class="card">
+                    <h3>Enter a Friend's Invite Code</h3>
+                    <p class="card-subtitle">Use a friend's code to join and earn rewards</p>
+                    <input type="text" id="friendCodeInput" placeholder="Enter invite code (e.g., ABC12345)" class="input-field" maxlength="10">
+                    <button class="btn btn-primary btn-full" onclick="applyInviteCode()">Apply Invite Code</button>
+                </div>
+
+                <!-- Back Button -->
+                <button class="btn btn-outline btn-full" onclick="goToDashboard()">Back to Dashboard</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 RewardHub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
