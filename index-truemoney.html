@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RewardHub - TrueMoneyအတွက် Withdrawal System</title>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .content {
+            padding: 30px 20px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid #e0e7ff;
+        }
+
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .conversion-box {
+            background: linear-gradient(135deg, #fff5e6 0%, #ffe6cc 100%);
+            border: 2px solid #ffd699;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .conversion-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .conversion-from {
+            color: #667eea;
+        }
+
+        .conversion-arrow {
+            color: #999;
+        }
+
+        .conversion-to {
+            color: #28a745;
+        }
+
+        .withdraw-section {
+            background: linear-gradient(135deg, #ffe6e6 0%, #ffd4d4 100%);
+            border: 2px solid #ffb3b3;
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .withdraw-info {
+            background: white;
+            border: 2px solid #ffb3b3;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .withdraw-info strong {
+            color: #333;
+        }
+
+        .withdraw-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .withdraw-input-group input,
+        .withdraw-input-group select {
+            padding: 12px;
+            border: 2px solid #ffb3b3;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .withdraw-input-group button {
+            padding: 12px 20px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .withdraw-input-group button:hover {
+            background: #c82333;
+        }
+
+        .transaction-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #dc3545;
+        }
+
+        .transaction-info {
+            flex: 1;
+        }
+
+        .transaction-type {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .transaction-date {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .transaction-status {
+            font-size: 0.8rem;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-failed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .transaction-amount {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #dc3545;
+            text-align: right;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px 20px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e7ff;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #999;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f0f4ff;
+            color: #667eea;
+            border: 2px solid #667eea;
+            width: 100%;
+            padding: 12px;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e7ff;
+            border-radius: 10px;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #999;
+            font-size: 0.9rem;
+            border-top: 1px solid #e0e7ff;
+        }
+
+        .admin-section {
+            background: #f0f0f0;
+            border: 2px solid #ccc;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .admin-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .admin-request {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-request-info {
+            flex: 1;
+        }
+
+        .admin-request-user {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .admin-request-amount {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #dc3545;
+            margin-bottom: 5px;
+        }
+
+        .admin-request-method {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .admin-actions button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .btn-approve {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-approve:hover {
+            background: #218838;
+        }
+
+        .btn-reject {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-reject:hover {
+            background: #c82333;
+        }
+
+        .success {
+            background: #d4edda;
+            border: 2px solid #c3e6cb;
+            color: #155724;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .error {
+            background: #f8d7da;
+            border: 2px solid #f5c6cb;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.6rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .conversion-display {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>💰 RewardHub</h1>
+            <p>TrueMoneyအတွက် Withdrawal System</p>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- ===== USER DASHBOARD ===== -->
+            <div id="userDashboard" class="page active">
+                <div class="section">
+                    <div class="section-title">📊 Your Points</div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="userPoints">0</div>
+                            <div class="stat-label">Current Points</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="userBaht">0</div>
+                            <div class="stat-label">Baht Value</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="conversion-box">
+                        <div class="conversion-display">
+                            <span class="conversion-from">100 pts</span>
+                            <span class="conversion-arrow">→</span>
+                            <span class="conversion-to">10 Baht</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('withdrawTab')">Withdraw</button>
+                    <button class="tab-btn" onclick="switchTab('historyTab')">History</button>
+                </div>
+
+                <!-- Withdraw Tab -->
+                <div id="withdrawTab" class="tab-content active">
+                    <div class="section">
+                        <div class="withdraw-section">
+                            <div class="withdraw-info">
+                                <strong>💸 TrueMoneyအတွက် ငွေထုတ်ခြင်း</strong><br>
+                                ✓ အနည်းဆုံး: 1000 points (100 Baht)<br>
+                                ✓ အများဆုံး: အကန့်အသတ်မရှိ<br>
+                                ✓ ရောက်ခြင်း: 1-3 နေ့အတွင်း<br>
+                                ✓ အခမဲ့ (ကုန်ကျမည်မရှိ)<br>
+                                ✓ Admin ခွင့်ခံရပြီးမှ ငွေပေးမည်
+                            </div>
+
+                            <div id="withdrawSuccess" class="success" style="display: none;"></div>
+                            <div id="withdrawError" class="error" style="display: none;"></div>
+
+                            <div class="withdraw-input-group">
+                                <label style="font-weight: 600; color: #333; margin-bottom: 5px;">ငွေထုတ်မည့် အရေအတွက် (Points)</label>
+                                <input type="number" id="withdrawPoints" placeholder="1000 ကို အနည်းဆုံးထည့်သွင်းပါ" min="1000" step="100">
+                                <div style="font-size: 0.9rem; color: #666;">= <span id="withdrawBaht">0</span> Baht</div>
+                            </div>
+
+                            <div class="withdraw-input-group">
+                                <label style="font-weight: 600; color: #333; margin-bottom: 5px;">TrueMoneyဖုန်းနံပါတ်</label>
+                                <input type="tel" id="truemoneyPhone" placeholder="0812345678" pattern="[0-9]{10}">
+                            </div>
+
+                            <div class="withdraw-input-group">
+                                <label style="font-weight: 600; color: #333; margin-bottom: 5px;">TrueMoneyအကောင့်အမည်</label>
+                                <input type="text" id="truemoneyName" placeholder="TrueMoneyအကောင့်အမည်ထည့်သွင်းပါ">
+                            </div>
+
+                            <div class="withdraw-input-group">
+                                <label style="font-weight: 600; color: #333; margin-bottom: 5px;">မှတ်ချက် (ရွေးချယ်ခွင့်)</label>
+                                <input type="text" id="withdrawNotes" placeholder="မှတ်ချက်ထည့်သွင်းပါ">
+                            </div>
+
+                            <button class="btn btn-primary" onclick="submitWithdrawal()">💰 ငွေထုတ်ခြင်း</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- History Tab -->
+                <div id="historyTab" class="tab-content">
+                    <div class="section">
+                        <div id="withdrawalHistory" class="transaction-list">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📋</div>
+                                <p>ငွေထုတ်မှတ်တမ်းမရှိသေးပါ</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-secondary" onclick="goToPage('adminDashboard')" style="display: none;" id="adminBtn">🔧 Admin Panel</button>
+            </div>
+
+            <!-- ===== ADMIN DASHBOARD ===== -->
+            <div id="adminDashboard" class="page">
+                <div class="section">
+                    <div class="section-title">🔧 Admin Panel - ငွေထုတ်ခြင်းအတည်ပြုခြင်း</div>
+                    <div class="admin-section">
+                        <div class="admin-title">⏳ ကျေးဇူးခံစောင့်ဆိုင်းနေသောတောင်းဆိုမှုများ</div>
+                        <div id="pendingRequests">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">✓</div>
+                                <p>စောင့်ဆိုင်းနေသောတောင်းဆိုမှုမရှိပါ</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="admin-section">
+                        <div class="admin-title">✓ အတည်ပြုပြီးသောငွေထုတ်မှုများ</div>
+                        <div id="completedRequests">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📋</div>
+                                <p>အတည်ပြုပြီးသောမှတ်တမ်းမရှိသေးပါ</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-secondary" onclick="goToPage('userDashboard')">← နောက်သို့</button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>💰 100 pts = 10 Baht | အနည်းဆုံး: 1000 pts</p>
+            <p style="margin-top: 10px; font-size: 0.85rem;">© 2026 RewardHub. TrueMoneyအတွက် Withdrawal System.</p>
+        </div>
+    </div>
+
+    <script>
+        // ===== FIREBASE CONFIGURATION =====
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT.firebaseio.com",
+            projectId: "YOUR_PROJECT",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.database();
+
+        // ===== SYSTEM CONFIG =====
+        const SYSTEM_CONFIG = {
+            CONVERSION_RATE: 10,
+            MIN_WITHDRAW: 1000,
+            ADMIN_EMAIL: "admin@rewardhub.com" // Admin email
+        };
+
+        let currentUser = null;
+        let userData = null;
+        let isAdmin = false;
+
+        // ===== AUTHENTICATION =====
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                currentUser = user;
+                loadUserData();
+                checkAdminStatus();
+            } else {
+                currentUser = null;
+                userData = null;
+                isAdmin = false;
+            }
+        });
+
+        function loadUserData() {
+            if (!currentUser) return;
+
+            db.ref('users/' + currentUser.uid).on('value', snapshot => {
+                userData = snapshot.val();
+                updateDisplay();
+            });
+
+            // Load withdrawal history
+            db.ref('withdrawals/' + currentUser.uid).on('value', snapshot => {
+                const withdrawals = snapshot.val() || {};
+                displayWithdrawalHistory(withdrawals);
+            });
+        }
+
+        function checkAdminStatus() {
+            if (currentUser && currentUser.email === SYSTEM_CONFIG.ADMIN_EMAIL) {
+                isAdmin = true;
+                document.getElementById('adminBtn').style.display = 'block';
+                loadAdminData();
+            }
+        }
+
+        // ===== USER FUNCTIONS =====
+        function updateDisplay() {
+            if (!userData) return;
+
+            document.getElementById('userPoints').textContent = userData.points || 0;
+            document.getElementById('userBaht').textContent = Math.floor((userData.points || 0) / SYSTEM_CONFIG.CONVERSION_RATE);
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function goToPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        // ===== WITHDRAWAL FUNCTIONS =====
+        document.getElementById('withdrawPoints').addEventListener('input', function() {
+            const points = parseInt(this.value) || 0;
+            const baht = Math.floor(points / SYSTEM_CONFIG.CONVERSION_RATE);
+            document.getElementById('withdrawBaht').textContent = baht;
+        });
+
+        function submitWithdrawal() {
+            if (!currentUser || !userData) {
+                alert('❌ အကောင့်ထဲသို့ဝင်ပါ');
+                return;
+            }
+
+            const points = parseInt(document.getElementById('withdrawPoints').value);
+            const phone = document.getElementById('truemoneyPhone').value;
+            const name = document.getElementById('truemoneyName').value;
+            const notes = document.getElementById('withdrawNotes').value;
+
+            const successDiv = document.getElementById('withdrawSuccess');
+            const errorDiv = document.getElementById('withdrawError');
+
+            // Validation
+            if (!points || points < SYSTEM_CONFIG.MIN_WITHDRAW) {
+                errorDiv.textContent = `❌ အနည်းဆုံး ${SYSTEM_CONFIG.MIN_WITHDRAW} points ထည့်သွင်းပါ`;
+                errorDiv.style.display = 'block';
+                successDiv.style.display = 'none';
+                return;
+            }
+
+            if (points > userData.points) {
+                errorDiv.textContent = '❌ အချက်အလက်မလုံလောက်ပါ';
+                errorDiv.style.display = 'block';
+                successDiv.style.display = 'none';
+                return;
+            }
+
+            if (!phone || phone.length !== 10) {
+                errorDiv.textContent = '❌ ဖုန်းနံပါတ်မှားနေပါသည်';
+                errorDiv.style.display = 'block';
+                successDiv.style.display = 'none';
+                return;
+            }
+
+            if (!name || name.trim().length === 0) {
+                errorDiv.textContent = '❌ TrueMoneyအကောင့်အမည်ထည့်သွင်းပါ';
+                errorDiv.style.display = 'block';
+                successDiv.style.display = 'none';
+                return;
+            }
+
+            // Create withdrawal request
+            const withdrawalId = db.ref('withdrawals/' + currentUser.uid).push().key;
+            const baht = Math.floor(points / SYSTEM_CONFIG.CONVERSION_RATE);
+
+            const withdrawalData = {
+                userId: currentUser.uid,
+                userName: userData.name || 'Unknown',
+                userEmail: currentUser.email,
+                points: points,
+                baht: baht,
+                status: 'pending',
+                truemoneyPhone: phone,
+                truemoneyName: name,
+                notes: notes,
+                requestedAt: Date.now(),
+                completedAt: null,
+                approvedBy: null
+            };
+
+            db.ref('withdrawals/' + currentUser.uid + '/' + withdrawalId).set(withdrawalData)
+                .then(() => {
+                    // Deduct points
+                    const newPoints = userData.points - points;
+                    return db.ref('users/' + currentUser.uid + '/points').set(newPoints);
+                })
+                .then(() => {
+                    successDiv.textContent = `✅ ငွေထုတ်မှုအတည်ပြုခွင့်တောင်းဆိုမှုအောင်မြင်ပါပြီ!\n\n💰 ${baht} Baht\n📱 ${phone}\n👤 ${name}\n\nAdmin ကခွင့်ခံပြီးမှ ငွေပေးမည်ဖြစ်သည်။`;
+                    successDiv.style.display = 'block';
+                    errorDiv.style.display = 'none';
+
+                    // Clear form
+                    document.getElementById('withdrawPoints').value = '';
+                    document.getElementById('truemoneyPhone').value = '';
+                    document.getElementById('truemoneyName').value = '';
+                    document.getElementById('withdrawNotes').value = '';
+                    document.getElementById('withdrawBaht').textContent = '0';
+                })
+                .catch(error => {
+                    errorDiv.textContent = '❌ အမှားအယွင်း: ' + error.message;
+                    errorDiv.style.display = 'block';
+                    successDiv.style.display = 'none';
+                });
+        }
+
+        function displayWithdrawalHistory(withdrawals) {
+            const historyDiv = document.getElementById('withdrawalHistory');
+            const items = Object.entries(withdrawals);
+
+            if (items.length === 0) {
+                historyDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📋</div><p>ငွေထုတ်မှတ်တမ်းမရှိသေးပါ</p></div>';
+                return;
+            }
+
+            historyDiv.innerHTML = items.map(([id, w]) => `
+                <div class="transaction-item">
+                    <div class="transaction-info">
+                        <div class="transaction-type">${w.baht} Baht (${w.points} pts)</div>
+                        <div class="transaction-date">${new Date(w.requestedAt).toLocaleDateString('my-MM')}</div>
+                        <div class="transaction-date">📱 ${w.truemoneyPhone}</div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span class="transaction-status status-${w.status}">${w.status === 'pending' ? 'စောင့်ဆိုင်းနေ' : w.status === 'completed' ? 'အတည်ပြု' : 'ပယ်ဖျက်'}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ===== ADMIN FUNCTIONS =====
+        function loadAdminData() {
+            db.ref('withdrawals').on('value', snapshot => {
+                const allWithdrawals = snapshot.val() || {};
+                displayPendingRequests(allWithdrawals);
+                displayCompletedRequests(allWithdrawals);
+            });
+        }
+
+        function displayPendingRequests(allWithdrawals) {
+            const pendingDiv = document.getElementById('pendingRequests');
+            let pendingItems = [];
+
+            Object.entries(allWithdrawals).forEach(([userId, userWithdrawals]) => {
+                Object.entries(userWithdrawals).forEach(([withdrawalId, w]) => {
+                    if (w.status === 'pending') {
+                        pendingItems.push({ userId, withdrawalId, ...w });
+                    }
+                });
+            });
+
+            if (pendingItems.length === 0) {
+                pendingDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">✓</div><p>စောင့်ဆိုင်းနေသောတောင်းဆိုမှုမရှိပါ</p></div>';
+                return;
+            }
+
+            pendingDiv.innerHTML = pendingItems.map(w => `
+                <div class="admin-request">
+                    <div class="admin-request-info">
+                        <div class="admin-request-user">👤 ${w.userName} (${w.userEmail})</div>
+                        <div class="admin-request-amount">💰 ${w.baht} Baht (${w.points} pts)</div>
+                        <div class="admin-request-method">📱 TrueMoney: ${w.truemoneyName} - ${w.truemoneyPhone}</div>
+                        <div style="font-size: 0.85rem; color: #999; margin-top: 5px;">📅 ${new Date(w.requestedAt).toLocaleString('my-MM')}</div>
+                    </div>
+                    <div class="admin-actions">
+                        <button class="btn-approve" onclick="approveWithdrawal('${w.userId}', '${w.withdrawalId}')">✓ အတည်ပြု</button>
+                        <button class="btn-reject" onclick="rejectWithdrawal('${w.userId}', '${w.withdrawalId}')">✕ ပယ်ဖျက်</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function displayCompletedRequests(allWithdrawals) {
+            const completedDiv = document.getElementById('completedRequests');
+            let completedItems = [];
+
+            Object.entries(allWithdrawals).forEach(([userId, userWithdrawals]) => {
+                Object.entries(userWithdrawals).forEach(([withdrawalId, w]) => {
+                    if (w.status === 'completed' || w.status === 'failed') {
+                        completedItems.push({ userId, withdrawalId, ...w });
+                    }
+                });
+            });
+
+            if (completedItems.length === 0) {
+                completedDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📋</div><p>အတည်ပြုပြီးသောမှတ်တမ်းမရှိသေးပါ</p></div>';
+                return;
+            }
+
+            completedDiv.innerHTML = completedItems.map(w => `
+                <div class="admin-request">
+                    <div class="admin-request-info">
+                        <div class="admin-request-user">👤 ${w.userName}</div>
+                        <div class="admin-request-amount">💰 ${w.baht} Baht</div>
+                        <div class="admin-request-method">📱 ${w.truemoneyPhone}</div>
+                        <div style="font-size: 0.85rem; color: #999; margin-top: 5px;">✓ ${new Date(w.completedAt).toLocaleString('my-MM')}</div>
+                    </div>
+                    <span class="transaction-status status-${w.status}">${w.status === 'completed' ? 'အတည်ပြု' : 'ပယ်ဖျက်'}</span>
+                </div>
+            `).join('');
+        }
+
+        function approveWithdrawal(userId, withdrawalId) {
+            if (!confirm('ဤငွေထုတ်မှုအတည်ပြုပါသလား?')) return;
+
+            db.ref('withdrawals/' + userId + '/' + withdrawalId).update({
+                status: 'completed',
+                completedAt: Date.now(),
+                approvedBy: currentUser.email
+            }).then(() => {
+                alert('✅ အတည်ပြုပြီးပါပြီ။ ငွေပေးမည်ဖြစ်သည်။');
+            }).catch(error => {
+                alert('❌ အမှားအယွင်း: ' + error.message);
+            });
+        }
+
+        function rejectWithdrawal(userId, withdrawalId) {
+            const reason = prompt('ပယ်ဖျက်ကြောင်းအကြောင်းအရာထည့်သွင်းပါ:');
+            if (!reason) return;
+
+            db.ref('withdrawals/' + userId + '/' + withdrawalId).update({
+                status: 'failed',
+                completedAt: Date.now(),
+                approvedBy: currentUser.email,
+                rejectionReason: reason
+            }).then(() => {
+                // Refund points
+                db.ref('users/' + userId).once('value').then(snapshot => {
+                    const user = snapshot.val();
+                    const withdrawal = db.ref('withdrawals/' + userId + '/' + withdrawalId);
+                    withdrawal.once('value').then(snap => {
+                        const w = snap.val();
+                        const newPoints = (user.points || 0) + w.points;
+                        db.ref('users/' + userId + '/points').set(newPoints);
+                    });
+                });
+                alert('✅ ပယ်ဖျက်ပြီးပါပြီ။ အချက်အလက်ပြန်ထည့်သွင်းပြီးပါပြီ။');
+            }).catch(error => {
+                alert('❌ အမှားအယွင်း: ' + error.message);
+            });
+        }
+    </script>
+
+    <!-- Ad Scripts (Optional) -->
+    <script type='text/javascript' src='https://pl28344759.effectivegatecpm.com/eb/25/40/eb25401554277dcd898bb0414f0023b0.js'></script>
+</body>
+</html>
