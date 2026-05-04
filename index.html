@@ -3,308 +3,1086 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Wage - Earn Rewards</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    
+    <title>RewardHub - Profit-Safe Reward System</title>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
-        .glass-card { background: white; border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-        .progress-bar-fill { transition: width 0.5s ease-in-out; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .content {
+            padding: 30px 20px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid #e0e7ff;
+        }
+
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .conversion-box {
+            background: linear-gradient(135deg, #fff5e6 0%, #ffe6cc 100%);
+            border: 2px solid #ffd699;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .conversion-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .conversion-from {
+            color: #667eea;
+        }
+
+        .conversion-arrow {
+            color: #999;
+        }
+
+        .conversion-to {
+            color: #28a745;
+        }
+
+        .feature-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .feature-icon {
+            font-size: 1.4rem;
+            min-width: 30px;
+        }
+
+        .feature-text {
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        .feature-text strong {
+            color: #333;
+        }
+
+        .milestone-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+        }
+
+        .milestone-card {
+            background: linear-gradient(135deg, #e8f4f8 0%, #d4e8f0 100%);
+            border: 2px solid #b3d9e8;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .milestone-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .milestone-label {
+            font-size: 0.85rem;
+            color: #555;
+        }
+
+        .milestone-bonus {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #28a745;
+            margin-top: 5px;
+        }
+
+        .invite-code-box {
+            background: #f0f4ff;
+            border: 2px solid #e0e7ff;
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .invite-code-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .invite-code-display {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .invite-code-input {
+            flex: 1;
+            padding: 12px;
+            background: white;
+            border: 2px solid #e0e7ff;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-align: center;
+            color: #667eea;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-copy {
+            background: #667eea;
+            color: white;
+            padding: 12px 20px;
+        }
+
+        .btn-copy:hover {
+            background: #764ba2;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e7ff;
+            border-radius: 10px;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .progress-section {
+            background: #f0f4ff;
+            border: 2px solid #e0e7ff;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #e0e7ff;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .almost-there {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #856404;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        .withdraw-section {
+            background: linear-gradient(135deg, #ffe6e6 0%, #ffd4d4 100%);
+            border: 2px solid #ffb3b3;
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .withdraw-info {
+            background: white;
+            border: 2px solid #ffb3b3;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .withdraw-info strong {
+            color: #333;
+        }
+
+        .withdraw-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .withdraw-input-group input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ffb3b3;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .withdraw-input-group button {
+            padding: 12px 20px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .withdraw-input-group button:hover {
+            background: #c82333;
+        }
+
+        .transaction-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .transaction-item.withdraw {
+            border-left-color: #dc3545;
+        }
+
+        .transaction-info {
+            flex: 1;
+        }
+
+        .transaction-type {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .transaction-date {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .transaction-status {
+            font-size: 0.8rem;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-failed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .transaction-amount {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #28a745;
+            text-align: right;
+        }
+
+        .transaction-amount.negative {
+            color: #dc3545;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px 20px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e7ff;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #999;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .nav-buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-nav-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-nav-secondary {
+            background: #f0f4ff;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-nav-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #999;
+            font-size: 0.9rem;
+            border-top: 1px solid #e0e7ff;
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.6rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .milestone-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .conversion-display {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
-<body class="pb-32">
-
-    <nav class="sticky top-0 bg-white border-b border-gray-200 p-4 shadow-sm z-40 flex justify-between items-center">
-        <div class="flex items-center gap-2">
-            <div class="bg-green-100 p-2 rounded-lg text-lg">💰</div>
-            <div>
-                <h1 class="font-bold text-gray-800 text-sm">Daily Wage</h1>
-                <p class="text-[10px] text-gray-500">100 Pts = 10 Baht</p>
-            </div>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎁 RewardHub</h1>
+            <p>Profit-Safe Reward System</p>
         </div>
-        <div class="text-right">
-            <div class="text-green-600 font-extrabold text-xl"><span id="user-points">0</span> <span class="text-xs">PTS</span></div>
-            <div class="text-[11px] text-gray-500 font-bold">฿ <span id="user-baht">0.00</span></div>
-        </div>
-    </nav>
 
-    <main class="max-w-md mx-auto p-4 space-y-5 mt-2">
-
-        <section class="glass-card p-4 flex justify-between items-center border border-gray-100">
-            <div>
-                <h3 class="font-bold text-gray-800 text-sm">နေ့စဉ်ဝင်ရောက်ခြင်း</h3>
-                <p class="text-[10px] text-gray-500">နေ့တိုင်း Login ဝင်ပြီး အခမဲ့ယူပါ</p>
-            </div>
-            <button id="btn-daily" onclick="claimDaily()" class="bg-blue-600 text-white text-xs font-bold px-4 py-2 rounded-lg active:scale-95 transition-transform">
-                +2 Pts ယူမည်
-            </button>
-        </section>
-
-        <section class="glass-card p-5 border border-gray-100 relative overflow-hidden">
-            <h3 class="font-bold text-gray-800 mb-2">👥 သူငယ်ချင်းဖိတ်ခေါ်မည်</h3>
-            <p class="text-xs text-gray-500 mb-4">သင့် Invite Code ကို သူငယ်ချင်းများထည့်သွင်းတိုင်း Point ရပါမည်။</p>
-            
-            <div class="bg-green-50 border border-green-200 rounded-xl p-3 mb-4 flex justify-between items-center">
-                <span class="text-xs text-green-700 font-semibold">သင့် Invite Code:</span>
-                <span id="my-invite-code" class="font-mono font-bold text-lg text-green-800 tracking-wider">------</span>
-            </div>
-
-            <div class="mb-4">
-                <div class="flex justify-between text-xs font-bold mb-1">
-                    <span class="text-gray-700">Invite 10 Friends → Earn 10 Baht</span>
-                    <span id="invite-progress-text" class="text-green-600">0/10</span>
-                </div>
-                <div class="w-full bg-gray-200 rounded-full h-2.5">
-                    <div id="invite-progress-bar" class="bg-green-500 h-2.5 rounded-full progress-bar-fill" style="width: 0%"></div>
-                </div>
-                <p id="almost-there-msg" class="text-[10px] text-orange-500 font-semibold mt-1 hidden">🔥 Almost there! နည်းနည်းပဲလိုတော့တယ်!</p>
-            </div>
-
-            <button onclick="shareInviteCode()" class="w-full bg-green-600 text-white font-bold py-3 rounded-xl shadow-md active:scale-95 transition-transform text-sm mb-4">
-                🚀 သူငယ်ချင်းများကို ဖိတ်ခေါ်မည်
-            </button>
-
-            <div class="border-t pt-4">
-                <p class="text-[11px] text-gray-500 mb-2 font-semibold">သူငယ်ချင်း၏ Invite Code ထည့်ရန် (တစ်ကြိမ်သာရမည်)</p>
-                <div class="flex gap-2">
-                    <input type="text" id="friend-code-input" placeholder="Enter Code" class="flex-1 bg-gray-50 border rounded-lg px-3 text-sm font-mono uppercase" maxlength="6">
-                    <button id="btn-submit-code" onclick="submitFriendCode()" class="bg-gray-800 text-white text-xs px-4 rounded-lg font-bold">အတည်ပြု</button>
-                </div>
-            </div>
-        </section>
-
-        <section class="glass-card p-5 border border-gray-100">
-            <h3 class="font-bold text-gray-800 mb-1">📺 ကြော်ငြာကြည့်ရန်</h3>
-            <p class="text-xs text-gray-500 mb-4">ကြော်ငြာကို အချိန်ပြည့်ကြည့်ပါက Point ရပါမည်။</p>
-            
-            <button onclick="openAdModal()" class="w-full flex items-center justify-between bg-orange-50 border border-orange-200 p-4 rounded-xl active:scale-95 transition-transform">
-                <div class="text-left">
-                    <span class="block font-bold text-orange-800 text-sm">Watch Video Ad</span>
-                    <span class="text-[10px] text-orange-600">အချိန်ပြည့်သည်အထိ ကြည့်ပေးပါ။</span>
-                </div>
-                <div class="bg-orange-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm">+5 Pts</div>
-            </button>
-        </section>
-
-        <section class="glass-card p-5 border border-gray-100">
-            <h3 class="font-bold text-gray-800 mb-3">💸 ငွေထုတ်ယူရန်</h3>
-            <div class="bg-gray-50 border rounded-xl p-4">
-                <div class="flex items-center gap-3 mb-4">
-                    <img src="https://www.truemoney.com/wp-content/uploads/2020/12/logo-truemoney-wallet-2020.png" alt="TrueMoney" class="h-6">
-                    <div>
-                        <p class="text-sm font-bold">TrueMoney Wallet</p>
-                        <p class="text-[10px] text-gray-500">Minimum: 1000 Pts (100 Baht)</p>
+        <!-- Content -->
+        <div class="content">
+            <!-- ===== HOME PAGE ===== -->
+            <div id="homePage" class="page active">
+                <div class="section">
+                    <div class="section-title">📊 Your Dashboard</div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="homePoints">0</div>
+                            <div class="stat-label">Current Points</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="homeBaht">0</div>
+                            <div class="stat-label">Baht Value</div>
+                        </div>
                     </div>
                 </div>
-                <button onclick="requestWithdraw()" class="w-full bg-gray-800 text-white font-bold py-3 rounded-xl text-sm active:scale-95 transition-transform">
-                    ငွေထုတ်မည်
-                </button>
-            </div>
-        </section>
-    </main>
 
-    <div id="ad-modal" class="fixed inset-0 bg-black z-[100] flex flex-col justify-center items-center hidden">
-        <div class="absolute top-0 w-full p-4 flex justify-between items-center text-white bg-black/50 z-10">
-            <span class="text-sm font-bold">Advertisement</span>
-            <div class="flex items-center gap-2">
-                <span id="ad-timer" class="bg-gray-800 px-3 py-1 rounded-full text-xs font-bold">30s</span>
-                <button id="ad-close-btn" onclick="closeAdAndReward()" class="bg-red-500 w-8 h-8 rounded-full font-bold hidden flex justify-center items-center">✕</button>
+                <div class="section">
+                    <div class="conversion-box">
+                        <div class="conversion-display">
+                            <span class="conversion-from">100 pts</span>
+                            <span class="conversion-arrow">→</span>
+                            <span class="conversion-to">10 Baht</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">💰 How to Earn</div>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <div class="feature-icon">👥</div>
+                            <div class="feature-text"><strong>Invite Friends:</strong> 5 points per invite</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📅</div>
+                            <div class="feature-text"><strong>Daily Login:</strong> 2 points per day</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📺</div>
+                            <div class="feature-text"><strong>Watch Ads:</strong> 3-5 points each</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <div class="feature-text"><strong>Complete Tasks:</strong> 5-10 points each</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn-nav-primary" onclick="goToPage('invitePage')">📤 Invite Friends</button>
+                    <button class="btn-nav-secondary" onclick="goToPage('dashboardPage')">📊 Dashboard</button>
+                </div>
+            </div>
+
+            <!-- ===== INVITE PAGE ===== -->
+            <div id="invitePage" class="page">
+                <div class="section">
+                    <div class="section-title">👥 Invite Friends & Earn</div>
+                    <div class="progress-section">
+                        <div class="progress-info">
+                            <span id="progressText">0/10 friends</span>
+                            <span id="progressPercent">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <div id="almostThere" class="almost-there" style="display: none;">
+                            <span>⚡</span>
+                            <span>Almost there! Just a few more invites!</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">🎯 Milestone Bonuses</div>
+                    <div class="milestone-grid">
+                        <div class="milestone-card">
+                            <div class="milestone-number">10</div>
+                            <div class="milestone-label">Friends</div>
+                            <div class="milestone-bonus">+50 pts</div>
+                        </div>
+                        <div class="milestone-card">
+                            <div class="milestone-number">20</div>
+                            <div class="milestone-label">Friends</div>
+                            <div class="milestone-bonus">+200 pts</div>
+                        </div>
+                        <div class="milestone-card">
+                            <div class="milestone-number">50</div>
+                            <div class="milestone-label">Friends</div>
+                            <div class="milestone-bonus">+700 pts</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">🔗 Your Invite Code</div>
+                    <div class="invite-code-box">
+                        <div class="invite-code-label">Share this code with friends</div>
+                        <div class="invite-code-display">
+                            <input type="text" id="inviteCode" class="invite-code-input" readonly>
+                            <button class="btn btn-copy" onclick="copyCode()">Copy</button>
+                        </div>
+                        <button class="btn btn-primary" onclick="shareCode()">📤 Share Code</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">✓ Use Friend's Code</div>
+                    <input type="text" id="friendCode" class="input-field" placeholder="Enter friend's invite code" maxlength="10">
+                    <button class="btn btn-primary" onclick="applyFriendCode()">Apply Code (+5 pts)</button>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn-nav-secondary" onclick="goToPage('homePage')">← Back</button>
+                </div>
+            </div>
+
+            <!-- ===== DASHBOARD PAGE ===== -->
+            <div id="dashboardPage" class="page">
+                <div class="section">
+                    <div class="section-title">📊 Account Overview</div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="dashPoints">0</div>
+                            <div class="stat-label">Points</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="dashInvites">0</div>
+                            <div class="stat-label">Invites</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="conversion-box">
+                        <div class="conversion-display">
+                            <span class="conversion-to" id="bahtValue">0 Baht</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('earnTab')">Earn</button>
+                    <button class="tab-btn" onclick="switchTab('historyTab')">History</button>
+                    <button class="tab-btn" onclick="switchTab('withdrawTab')">Withdraw</button>
+                </div>
+
+                <!-- Earn Tab -->
+                <div id="earnTab" class="tab-content active">
+                    <div class="section">
+                        <div class="feature-list">
+                            <div class="feature-item" onclick="watchAds()" style="cursor: pointer;">
+                                <div class="feature-icon">📺</div>
+                                <div class="feature-text"><strong>Watch Ads</strong> - Earn 3-5 points</div>
+                            </div>
+                            <div class="feature-item" onclick="completeTask()" style="cursor: pointer;">
+                                <div class="feature-icon">✓</div>
+                                <div class="feature-text"><strong>Complete Task</strong> - Earn 5-10 points</div>
+                            </div>
+                            <div class="feature-item" onclick="dailyLogin()" style="cursor: pointer;">
+                                <div class="feature-icon">📅</div>
+                                <div class="feature-text"><strong>Daily Login</strong> - Earn 2 points</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- History Tab -->
+                <div id="historyTab" class="tab-content">
+                    <div class="section">
+                        <div id="transactionList" class="transaction-list">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📋</div>
+                                <p>No transactions yet</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Withdraw Tab -->
+                <div id="withdrawTab" class="tab-content">
+                    <div class="section">
+                        <div class="withdraw-section">
+                            <div class="withdraw-info">
+                                <strong>💸 Withdrawal System</strong><br>
+                                ✓ Minimum: 1000 points (100 Baht)<br>
+                                ✓ Status: pending → completed<br>
+                                ✓ Anti-fraud: Same device/IP protection<br>
+                                ✓ Processing: 1-3 business days
+                            </div>
+
+                            <div class="withdraw-input-group">
+                                <input type="number" id="withdrawAmount" placeholder="Enter points (min 1000)" min="1000" step="100">
+                                <button onclick="requestWithdraw()">Withdraw</button>
+                            </div>
+
+                            <div id="withdrawList" class="transaction-list">
+                                <div class="empty-state">
+                                    <div class="empty-state-icon">💰</div>
+                                    <p>No withdrawal requests yet</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn-nav-secondary" onclick="goToPage('homePage')">← Back</button>
+                </div>
             </div>
         </div>
 
-        <div class="w-full max-w-md bg-white p-2 rounded-lg text-center mx-4">
-            <p class="text-xs text-gray-400 mb-2">Ad is loading...</p>
-            <div id="container-0c2b6d3f941113823d5379a543284bf7">
-                <script async="async" data-cfasync="false" src="https://pl28343177.profitablecpmratenetwork.com/0c2b6d3f941113823d5379a543284bf7/invoke.js"></script>
-            </div>
-            <div class="h-40 bg-gray-100 flex items-center justify-center mt-2 border border-dashed text-gray-400 text-xs">
-                (Ad Space Simulation)
-            </div>
+        <!-- Footer -->
+        <div class="footer">
+            <p>💰 100 pts = 10 Baht | Min Withdrawal: 1000 pts</p>
+            <p style="margin-top: 10px; font-size: 0.85rem;">© 2026 RewardHub. Profit-Safe System.</p>
         </div>
-        <p class="text-white text-xs mt-4">ကျေးဇူးပြု၍ စောင့်ပေးပါ။ အချိန်ပြည့်လျှင် အမှားခြစ် (X) ပေါ်လာပါမည်။</p>
-    </div>
-
-    <div class="fixed bottom-0 w-full bg-white border-t py-1 flex flex-col items-center z-40">
-        <span class="text-[8px] text-gray-400">SPONSORED</span>
-        <script>
-            atOptions = { 'key' : '1f368fdf67bf1944d873877b1354fd14', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
-        </script>
-        <script src="https://www.highperformanceformat.com/1f368fdf67bf1944d873877b1354fd14/invoke.js"></script>
     </div>
 
     <script>
-        // System Data Initialization
-        let points = parseInt(localStorage.getItem('dw_points')) || 0;
-        let invites = parseInt(localStorage.getItem('dw_invites')) || 0;
-        let myCode = localStorage.getItem('dw_my_code');
-        let codeEntered = localStorage.getItem('dw_code_entered') === 'true';
-        let lastLogin = localStorage.getItem('dw_last_login');
+        // ===== SYSTEM CONFIGURATION =====
+        const SYSTEM_CONFIG = {
+            CONVERSION_RATE: 10,
+            INVITE_POINTS: 5,
+            DAILY_LOGIN_POINTS: 2,
+            WATCH_ADS_MIN: 3,
+            WATCH_ADS_MAX: 5,
+            TASK_MIN: 5,
+            TASK_MAX: 10,
+            MIN_WITHDRAW: 1000,
+            MILESTONE_1: { invites: 10, bonus: 50 },
+            MILESTONE_2: { invites: 20, bonus: 200 },
+            MILESTONE_3: { invites: 50, bonus: 700 }
+        };
 
-        // Generate Invite Code on first load
-        if (!myCode) {
-            myCode = Math.random().toString(36).substring(2, 8).toUpperCase();
-            localStorage.setItem('dw_my_code', myCode);
+        // ===== USER DATA =====
+        let userData = {
+            userId: generateUserId(),
+            points: 1250,
+            invites: 7,
+            inviteCode: generateCode(),
+            lastLogin: new Date(),
+            deviceId: getDeviceId(),
+            transactions: [
+                { id: 1, type: 'Invite Reward', points: 5, date: 'Today', status: 'completed' },
+                { id: 2, type: 'Daily Login', points: 2, date: 'Yesterday', status: 'completed' },
+                { id: 3, type: 'Watch Ads', points: 4, date: '2 days ago', status: 'completed' }
+            ],
+            withdrawals: [
+                { id: 1, amount: 500, baht: 50, date: 'Today', status: 'completed' },
+                { id: 2, amount: 1000, baht: 100, date: '3 days ago', status: 'completed' }
+            ]
+        };
+
+        // ===== UTILITY FUNCTIONS =====
+        function generateUserId() {
+            return 'USER' + Math.random().toString(36).substr(2, 8).toUpperCase();
         }
 
-        // Initialize UI
-        function updateDashboard() {
-            document.getElementById('user-points').innerText = points;
-            document.getElementById('user-baht').innerText = (points / 10).toFixed(2);
-            document.getElementById('my-invite-code').innerText = myCode;
+        function generateCode() {
+            return 'CODE' + Math.random().toString(36).substr(2, 6).toUpperCase();
+        }
 
-            // Invite Progress Logic (10 per cycle)
-            let cycleInvites = invites % 10; 
-            if (invites > 0 && cycleInvites === 0) cycleInvites = 10; // Show 10/10 fully before resetting visually
-            
-            document.getElementById('invite-progress-text').innerText = `${cycleInvites}/10`;
-            document.getElementById('invite-progress-bar').style.width = `${(cycleInvites / 10) * 100}%`;
+        function getDeviceId() {
+            let deviceId = localStorage.getItem('deviceId');
+            if (!deviceId) {
+                deviceId = 'DEVICE' + Date.now() + Math.random().toString(36).substr(2, 5);
+                localStorage.setItem('deviceId', deviceId);
+            }
+            return deviceId;
+        }
 
-            // Almost there notification
-            const almostMsg = document.getElementById('almost-there-msg');
-            if (cycleInvites >= 7 && cycleInvites < 10) {
-                almostMsg.classList.remove('hidden');
+        function showNotification(msg) {
+            alert(msg);
+        }
+
+        function goToPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            updateDisplay();
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // ===== DISPLAY UPDATES =====
+        function updateDisplay() {
+            document.getElementById('homePoints').textContent = userData.points;
+            document.getElementById('homeBaht').textContent = Math.floor(userData.points / SYSTEM_CONFIG.CONVERSION_RATE);
+            document.getElementById('dashPoints').textContent = userData.points;
+            document.getElementById('dashInvites').textContent = userData.invites;
+            document.getElementById('bahtValue').textContent = Math.floor(userData.points / SYSTEM_CONFIG.CONVERSION_RATE) + ' Baht';
+            document.getElementById('inviteCode').value = userData.inviteCode;
+
+            updateProgress();
+            updateTransactions();
+            updateWithdrawals();
+        }
+
+        function updateProgress() {
+            let nextMilestone = 10;
+            if (userData.invites >= SYSTEM_CONFIG.MILESTONE_3.invites) {
+                nextMilestone = SYSTEM_CONFIG.MILESTONE_3.invites;
+            } else if (userData.invites >= SYSTEM_CONFIG.MILESTONE_2.invites) {
+                nextMilestone = SYSTEM_CONFIG.MILESTONE_2.invites;
             } else {
-                almostMsg.classList.add('hidden');
+                nextMilestone = SYSTEM_CONFIG.MILESTONE_1.invites;
             }
 
-            // Lock Input if code already entered
-            if (codeEntered) {
-                const inputBtn = document.getElementById('btn-submit-code');
-                const inputField = document.getElementById('friend-code-input');
-                inputBtn.innerText = "ထည့်သွင်းပြီး";
-                inputBtn.classList.replace('bg-gray-800', 'bg-gray-400');
-                inputField.disabled = true;
-                inputBtn.disabled = true;
-            }
+            const progress = Math.min((userData.invites / nextMilestone) * 100, 100);
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = userData.invites + '/' + nextMilestone + ' friends';
+            document.getElementById('progressPercent').textContent = Math.round(progress) + '%';
 
-            // Check Daily Login
-            if (lastLogin === new Date().toDateString()) {
-                const dBtn = document.getElementById('btn-daily');
-                dBtn.innerText = "ရယူပြီးပါပြီ";
-                dBtn.classList.replace('bg-blue-600', 'bg-gray-400');
-                dBtn.disabled = true;
-            }
-
-            // Save state
-            localStorage.setItem('dw_points', points);
-            localStorage.setItem('dw_invites', invites);
-        }
-
-        updateDashboard();
-
-        // 1. Daily Login
-        function claimDaily() {
-            const today = new Date().toDateString();
-            if (lastLogin !== today) {
-                points += 2;
-                lastLogin = today;
-                localStorage.setItem('dw_last_login', lastLogin);
-                updateDashboard();
-                alert("🎉 နေ့စဉ် Login အတွက် +2 PTS ရရှိပါသည်!");
-            }
-        }
-
-        // 2. Share Invite Code
-        async function shareInviteCode() {
-            const shareText = `Daily Wage App တွင် ငွေရှာကြစို့! 
-ကျနော့်ရဲ့ Invite Code [ ${myCode} ] ကို ထည့်သွင်းပြီး အခမဲ့ Point များရယူပါ။ 
-ဒေါင်းလုဒ်လင့်ခ်: https://daily-y-app.github.io/Apk-download/`;
-
-            if (navigator.share) {
-                try {
-                    await navigator.share({ title: 'Daily Wage Invite', text: shareText });
-                } catch (err) {}
+            const almostThere = document.getElementById('almostThere');
+            if (userData.invites >= nextMilestone - 3 && userData.invites < nextMilestone) {
+                almostThere.style.display = 'flex';
             } else {
-                navigator.clipboard.writeText(shareText);
-                alert("Invite Code ကို Copy ကူးပြီးပါပြီ! သူငယ်ချင်းများထံ ပို့ပေးပါ။");
+                almostThere.style.display = 'none';
             }
         }
 
-        // 3. Submit Friend's Code (Anti-Cheat basic logic)
-        function submitFriendCode() {
-            if (codeEntered) return;
-            const input = document.getElementById('friend-code-input').value.trim().toUpperCase();
-            
-            if (input === myCode) {
-                alert("မိမိ၏ Code ကို မိမိပြန်ထည့်၍ မရပါ။");
+        function updateTransactions() {
+            const list = document.getElementById('transactionList');
+            if (userData.transactions.length === 0) {
+                list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📋</div><p>No transactions yet</p></div>';
                 return;
             }
-            if (input.length === 6) {
-                // In a real app, this sends request to server to give inviter points.
-                // We simulate the current user getting a small bonus for entering code.
-                codeEntered = true;
-                localStorage.setItem('dw_code_entered', 'true');
-                points += 5; // Reward for user who enters code
-                
-                // Simulate "Inviter" logic (Local simulation only)
-                addInviteSimulation(); 
 
-                updateDashboard();
-                alert("✅ Invite Code ထည့်သွင်းအောင်မြင်ပါသည်။ သင့်အတွက် +5 PTS ရရှိပါပြီ!");
+            list.innerHTML = userData.transactions.map((tx) => `
+                <div class="transaction-item">
+                    <div class="transaction-info">
+                        <div class="transaction-type">${tx.type}</div>
+                        <div class="transaction-date">${tx.date}</div>
+                    </div>
+                    <div class="transaction-amount">+${tx.points}</div>
+                </div>
+            `).join('');
+        }
+
+        function updateWithdrawals() {
+            const list = document.getElementById('withdrawList');
+            if (userData.withdrawals.length === 0) {
+                list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">💰</div><p>No withdrawal requests yet</p></div>';
+                return;
+            }
+
+            list.innerHTML = userData.withdrawals.map((w) => `
+                <div class="transaction-item withdraw">
+                    <div class="transaction-info">
+                        <div class="transaction-type">Withdrawal: ${w.baht} Baht</div>
+                        <div class="transaction-date">${w.date}</div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div class="transaction-status status-${w.status}">${w.status.toUpperCase()}</div>
+                        <div class="transaction-amount negative">-${w.amount}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ===== EARNING FUNCTIONS =====
+        function watchAds() {
+            const points = Math.floor(Math.random() * (SYSTEM_CONFIG.WATCH_ADS_MAX - SYSTEM_CONFIG.WATCH_ADS_MIN + 1)) + SYSTEM_CONFIG.WATCH_ADS_MIN;
+            userData.points += points;
+            userData.transactions.unshift({
+                id: userData.transactions.length + 1,
+                type: 'Watch Ads',
+                points: points,
+                date: 'Today',
+                status: 'completed'
+            });
+            updateDisplay();
+            showNotification(`✅ Great! You earned +${points} points!`);
+        }
+
+        function completeTask() {
+            const points = Math.floor(Math.random() * (SYSTEM_CONFIG.TASK_MAX - SYSTEM_CONFIG.TASK_MIN + 1)) + SYSTEM_CONFIG.TASK_MIN;
+            userData.points += points;
+            userData.transactions.unshift({
+                id: userData.transactions.length + 1,
+                type: 'Complete Task',
+                points: points,
+                date: 'Today',
+                status: 'completed'
+            });
+            updateDisplay();
+            showNotification(`✅ Task completed! You earned +${points} points!`);
+        }
+
+        function dailyLogin() {
+            const points = SYSTEM_CONFIG.DAILY_LOGIN_POINTS;
+            userData.points += points;
+            userData.transactions.unshift({
+                id: userData.transactions.length + 1,
+                type: 'Daily Login',
+                points: points,
+                date: 'Today',
+                status: 'completed'
+            });
+            updateDisplay();
+            showNotification(`✅ Daily bonus! You earned +${points} points!`);
+        }
+
+        // ===== INVITE FUNCTIONS =====
+        function copyCode() {
+            navigator.clipboard.writeText(userData.inviteCode).then(() => {
+                showNotification('✅ Invite code copied!');
+            });
+        }
+
+        function shareCode() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'RewardHub',
+                    text: 'Join RewardHub and earn rewards! Use my code: ' + userData.inviteCode,
+                    url: window.location.href
+                });
             } else {
-                alert("Invite Code မှားယွင်းနေပါသည်။ (၆ လုံး ပြည့်အောင်ထည့်ပါ)");
+                navigator.clipboard.writeText(userData.inviteCode);
+                showNotification('✅ Code copied! Share it with your friends!');
             }
         }
 
-        function addInviteSimulation() {
-            invites++;
-            points += 5; // Base 5 Pts
-            
-            // Tiered Growth Boost Check
-            if (invites % 10 === 0 && invites < 20) { points += 50; alert("🎁 10 ယောက်ပြည့် Bonus +50 PTS ရပါပြီ!"); }
-            if (invites === 20) { points += 200; alert("🚀 20 ယောက်ပြည့် Mega Bonus +200 PTS!"); }
-            if (invites === 50) { points += 700; alert("🔥 50 ယောက်ပြည့် Super Bonus +700 PTS!"); }
+        function applyFriendCode() {
+            const code = document.getElementById('friendCode').value.trim().toUpperCase();
+            if (!code) {
+                showNotification('❌ Please enter a code');
+                return;
+            }
+            if (code === userData.inviteCode) {
+                showNotification('❌ Cannot use your own code!');
+                return;
+            }
 
-            updateDashboard();
+            const usedCodes = JSON.parse(localStorage.getItem('usedCodes') || '[]');
+            if (usedCodes.includes(code)) {
+                showNotification('❌ This code has already been used on this device!');
+                return;
+            }
+
+            userData.points += SYSTEM_CONFIG.INVITE_POINTS;
+            userData.invites += 1;
+            usedCodes.push(code);
+            localStorage.setItem('usedCodes', JSON.stringify(usedCodes));
+
+            userData.transactions.unshift({
+                id: userData.transactions.length + 1,
+                type: 'Invite Code Used',
+                points: SYSTEM_CONFIG.INVITE_POINTS,
+                date: 'Today',
+                status: 'completed'
+            });
+
+            checkMilestones();
+
+            document.getElementById('friendCode').value = '';
+            updateDisplay();
+            showNotification(`✅ Code applied! You earned +${SYSTEM_CONFIG.INVITE_POINTS} points!`);
         }
 
-        // 4. Secure Watch Ad Logic
-        let adTimerInterval;
-        let adTimeLeft = 30; // 30 seconds wait
+        function checkMilestones() {
+            let bonusPoints = 0;
 
-        function openAdModal() {
-            document.getElementById('ad-modal').classList.remove('hidden');
-            document.getElementById('ad-close-btn').classList.add('hidden');
-            adTimeLeft = 30;
-            document.getElementById('ad-timer').innerText = adTimeLeft + "s";
-            document.getElementById('ad-timer').classList.remove('hidden');
+            if (userData.invites === SYSTEM_CONFIG.MILESTONE_1.invites) {
+                bonusPoints = SYSTEM_CONFIG.MILESTONE_1.bonus;
+                showNotification(`🎉 Milestone reached! +${bonusPoints} bonus points!`);
+            } else if (userData.invites === SYSTEM_CONFIG.MILESTONE_2.invites) {
+                bonusPoints = SYSTEM_CONFIG.MILESTONE_2.bonus;
+                showNotification(`🎉 Milestone reached! +${bonusPoints} bonus points!`);
+            } else if (userData.invites === SYSTEM_CONFIG.MILESTONE_3.invites) {
+                bonusPoints = SYSTEM_CONFIG.MILESTONE_3.bonus;
+                showNotification(`🎉 Milestone reached! +${bonusPoints} bonus points!`);
+            }
 
-            // Timer Logic
-            adTimerInterval = setInterval(() => {
-                adTimeLeft--;
-                document.getElementById('ad-timer').innerText = adTimeLeft + "s";
-                
-                if (adTimeLeft <= 0) {
-                    clearInterval(adTimerInterval);
-                    document.getElementById('ad-timer').classList.add('hidden');
-                    document.getElementById('ad-close-btn').classList.remove('hidden'); // Show Close (X) button
-                }
-            }, 1000);
+            if (bonusPoints > 0) {
+                userData.points += bonusPoints;
+                userData.transactions.unshift({
+                    id: userData.transactions.length + 1,
+                    type: 'Milestone Bonus',
+                    points: bonusPoints,
+                    date: 'Today',
+                    status: 'completed'
+                });
+            }
         }
 
-        function closeAdAndReward() {
-            document.getElementById('ad-modal').classList.add('hidden');
-            points += 5;
-            updateDashboard();
-            alert("✅ ကြော်ငြာကြည့်ရှုခြင်း ပြီးဆုံးပါပြီ။ +5 PTS ရရှိပါသည်။");
-        }
-
-        // 5. Withdraw System Logic
+        // ===== WITHDRAWAL FUNCTIONS =====
         function requestWithdraw() {
-            if (points >= 1000) {
-                const phone = prompt("TrueMoney Wallet ဖုန်းနံပါတ် ရိုက်ထည့်ပါ (ဥပမာ- 0812345678):");
-                if (phone && phone.length >= 9) {
-                    points -= 1000; // Deduct exactly 1000 pts (100 Baht)
-                    updateDashboard();
-                    alert(`✅ အောင်မြင်ပါသည်။ သင့် TrueMoney ${phone} သို့ 100 Baht လွှဲပေးရန် စာရင်းတင်ပြီးပါပြီ။`);
-                } else {
-                    alert("ဖုန်းနံပါတ် မှားယွင်းနေပါသည်။ ပြန်လည်စစ်ဆေးပါ။");
-                }
-            } else {
-                alert(`ငွေထုတ်ရန် Point မလုံလောက်ပါ။ 1000 PTS ပြည့်ရန် ${1000 - points} PTS လိုပါသေးသည်။`);
+            const amount = parseInt(document.getElementById('withdrawAmount').value);
+
+            if (!amount || amount < SYSTEM_CONFIG.MIN_WITHDRAW) {
+                showNotification(`❌ Minimum withdrawal: ${SYSTEM_CONFIG.MIN_WITHDRAW} points (${SYSTEM_CONFIG.MIN_WITHDRAW / SYSTEM_CONFIG.CONVERSION_RATE} Baht)`);
+                return;
             }
+
+            if (amount > userData.points) {
+                showNotification('❌ Insufficient points!');
+                return;
+            }
+
+            userData.points -= amount;
+            const baht = amount / SYSTEM_CONFIG.CONVERSION_RATE;
+            userData.withdrawals.unshift({
+                id: userData.withdrawals.length + 1,
+                amount: amount,
+                baht: baht,
+                date: 'Today',
+                status: 'pending'
+            });
+
+            userData.transactions.unshift({
+                id: userData.transactions.length + 1,
+                type: 'Withdrawal Request',
+                points: -amount,
+                date: 'Today',
+                status: 'pending'
+            });
+
+            document.getElementById('withdrawAmount').value = '';
+            updateDisplay();
+            showNotification(`✅ Withdrawal request submitted!\n${amount} points = ${baht} Baht\nStatus: PENDING (1-3 business days)`);
         }
+
+        // ===== INITIALIZATION =====
+        updateDisplay();
     </script>
+
+    <!-- Ad Scripts (Optional) -->
+    <script type='text/javascript' src='https://pl28344759.effectivegatecpm.com/eb/25/40/eb25401554277dcd898bb0414f0023b0.js'></script>
 </body>
 </html>
