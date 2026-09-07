@@ -342,6 +342,9 @@
             display: grid;
             grid-template-columns: 1fr;
             gap: 10px;
+            max-height: 62vh;
+            overflow-y: auto;
+            padding-right: 2px;
         }
 
         .share-modal-btn {
@@ -367,6 +370,19 @@
         .share-modal-btn-tt { background: linear-gradient(135deg, #000 0%, #333 100%); }
         .share-modal-btn-wa { background: linear-gradient(135deg, #25D366 0%, #1ba85c 100%); }
         .share-modal-btn-close { background: #999; }
+        .share-modal-btn-all { background: linear-gradient(135deg, #1B2358 0%, #B81D28 100%); }
+        .share-modal-btn-ms { background: #0084ff; }
+        .share-modal-btn-tg { background: #229ED9; }
+        .share-modal-btn-viber { background: #7360F2; }
+        .share-modal-btn-x { background: #222; }
+        .share-modal-btn-email { background: #666; }
+        .share-modal-note {
+            margin-top: 12px;
+            text-align: center;
+            color: #777;
+            font-size: 11px;
+            line-height: 1.5;
+        }
 
         .notification {
             position: fixed;
@@ -500,8 +516,14 @@
                 Share APK Link
             </h3>
             <div class="share-modal-buttons">
+                <button class="share-modal-btn share-modal-btn-all" onclick="shareViaDevice()">
+                    <i class="fas fa-mobile-screen-button"></i> All Apps / More
+                </button>
                 <button class="share-modal-btn share-modal-btn-fb" onclick="shareToFacebook()">
                     <i class="fab fa-facebook"></i> Facebook
+                </button>
+                <button class="share-modal-btn share-modal-btn-ms" onclick="shareToMessenger()">
+                    <i class="fab fa-facebook-messenger"></i> Messenger
                 </button>
                 <button class="share-modal-btn share-modal-btn-tt" onclick="shareToTikTok()">
                     <i class="fab fa-tiktok"></i> TikTok
@@ -509,10 +531,23 @@
                 <button class="share-modal-btn share-modal-btn-wa" onclick="shareToWhatsApp()">
                     <i class="fab fa-whatsapp"></i> WhatsApp
                 </button>
+                <button class="share-modal-btn share-modal-btn-tg" onclick="shareToTelegram()">
+                    <i class="fab fa-telegram"></i> Telegram
+                </button>
+                <button class="share-modal-btn share-modal-btn-viber" onclick="shareToViber()">
+                    <i class="fab fa-viber"></i> Viber
+                </button>
+                <button class="share-modal-btn share-modal-btn-x" onclick="shareToX()">
+                    <i class="fab fa-x-twitter"></i> X / Twitter
+                </button>
+                <button class="share-modal-btn share-modal-btn-email" onclick="shareByEmail()">
+                    <i class="fas fa-envelope"></i> Email
+                </button>
                 <button class="share-modal-btn share-modal-btn-close" onclick="closeShareModal()">
                     <i class="fas fa-times"></i> Close
                 </button>
             </div>
+            <div class="share-modal-note">All Apps / More ကိုနှိပ်ရင် ဖုန်းထဲက ရှဲနိုင်တဲ့ app အားလုံးကို ပြပါမယ်။</div>
         </div>
     </div>
 
@@ -526,7 +561,8 @@
             localStorage.setItem('deviceId', deviceId);
         }
 
-        const referralLink = 'https://daily-y-app.github.io/Apk-download/?ref=' + deviceId;
+        const appLink = 'https://daily-y-app.github.io/Apk-download';
+        const referralLink = appLink + '?ref=' + encodeURIComponent(deviceId);
         document.getElementById('referralLink').value = referralLink;
 
         // Copy Link
@@ -546,27 +582,95 @@
             document.getElementById('shareModal').classList.remove('show');
         }
 
-        // Share Functions
-        function shareToFacebook() {
-            const text = '🚀 DailyWage App - Earn Money Daily!\n\nShare this link and earn ฿10 per share!\n' + referralLink + '\n\n💰 Get ฿0.2 daily bonus + withdraw via PromptPay!';
-            const url = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(referralLink) + '&quote=' + encodeURIComponent(text);
-            window.open(url, '_blank', 'width=600,height=400');
-            recordShare('Facebook');
+        // Smart sharing helpers
+        const shareTitle = 'DailyWage App - Earn Money Daily!';
+        const shareText = '🚀 DailyWage App - Earn Money Daily!\n\nShare this link and earn ฿10 per share!\n' + referralLink + '\n\n💰 Get ฿0.2 daily bonus + withdraw via PromptPay!';
+
+        async function copyText(text) {
+            if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(text);
+                return true;
+            }
+            const helper = document.createElement('textarea');
+            helper.value = text;
+            helper.style.position = 'fixed';
+            helper.style.opacity = '0';
+            document.body.appendChild(helper);
+            helper.focus();
+            helper.select();
+            const copied = document.execCommand('copy');
+            helper.remove();
+            return copied;
+        }
+
+        async function shareViaDevice() {
+            if (navigator.share) {
+                try {
+                    await navigator.share({ title: shareTitle, text: shareText, url: referralLink });
+                    recordShare('All Apps');
+                    closeShareModal();
+                } catch (error) {
+                    if (error.name !== 'AbortError') showNotification('Share မအောင်မြင်ပါ။ ထပ်စမ်းကြည့်ပါ။');
+                }
+                return;
+            }
+            await copyText(shareText);
+            recordShare('All Apps');
+            closeShareModal();
+            showNotification('Link copied! သင်နှစ်သက်ရာ app ထဲ Paste လုပ်ပြီး ရှဲနိုင်ပါပြီ။');
+        }
+
+        function openShareUrl(url, platform) {
+            window.open(url, '_blank', 'noopener,noreferrer');
+            recordShare(platform);
             closeShareModal();
         }
 
-        function shareToTikTok() {
-            const text = 'DailyWage App - Earn Money Daily!\n\nShare this link and earn ฿10 per share!\n' + referralLink;
-            alert('Share on TikTok:\n\n' + text);
+        function shareToFacebook() {
+            const url = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(referralLink) + '&quote=' + encodeURIComponent(shareText);
+            openShareUrl(url, 'Facebook');
+        }
+
+        async function shareToMessenger() {
+            await copyText(shareText);
+            window.open('https://www.messenger.com/', '_blank', 'noopener,noreferrer');
+            recordShare('Messenger');
+            closeShareModal();
+            showNotification('Link copied! Messenger ထဲ Paste လုပ်ပြီး ပို့နိုင်ပါပြီ။');
+        }
+
+        async function shareToTikTok() {
+            await copyText(shareText);
+            window.open('https://www.tiktok.com/', '_blank', 'noopener,noreferrer');
             recordShare('TikTok');
             closeShareModal();
+            showNotification('Link copied! TikTok ထဲ Paste လုပ်ပြီး ရှဲနိုင်ပါပြီ။');
         }
 
         function shareToWhatsApp() {
-            const text = '🚀 DailyWage App - Earn Money Daily!\n\nShare this link and earn ฿10 per share!\n' + referralLink + '\n\n💰 Get ฿0.2 daily bonus + withdraw via PromptPay!';
-            const url = 'https://wa.me/?text=' + encodeURIComponent(text);
-            window.open(url, '_blank');
-            recordShare('WhatsApp');
+            openShareUrl('https://wa.me/?text=' + encodeURIComponent(shareText), 'WhatsApp');
+        }
+
+        function shareToTelegram() {
+            const url = 'https://t.me/share/url?url=' + encodeURIComponent(referralLink) + '&text=' + encodeURIComponent(shareText);
+            openShareUrl(url, 'Telegram');
+        }
+
+        function shareToViber() {
+            window.location.href = 'viber://forward?text=' + encodeURIComponent(shareText);
+            recordShare('Viber');
+            closeShareModal();
+        }
+
+        function shareToX() {
+            const url = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText) + '&url=' + encodeURIComponent(referralLink);
+            openShareUrl(url, 'X');
+        }
+
+        function shareByEmail() {
+            const url = 'mailto:?subject=' + encodeURIComponent(shareTitle) + '&body=' + encodeURIComponent(shareText);
+            window.location.href = url;
+            recordShare('Email');
             closeShareModal();
         }
 
