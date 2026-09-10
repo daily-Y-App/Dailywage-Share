@@ -3,668 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DailyWage - Share & Earn</title>
+    <title>DailyWage - Share APK</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #1B2358 0%, #B81D28 100%);
             min-height: 100vh;
-            padding: 0;
             color: #333;
         }
 
-        .container {
-            max-width: 100%;
-            margin: 0;
-            padding: 0;
-        }
+        .container { max-width: 520px; margin: 0 auto; padding: 18px 15px 28px; }
 
-        .header {
-            background: linear-gradient(135deg, #1B2358 0%, #B81D28 100%);
-            padding: 20px 15px;
-            text-align: center;
-            color: white;
+        .header { text-align: center; color: white; padding: 18px 8px 22px; }
+        .header .logo {
+            width: 58px;
+            height: 58px;
+            margin: 0 auto 12px;
+            display: grid;
+            place-items: center;
+            border-radius: 18px;
+            background: #EBC20E;
+            color: #1B2358;
+            font-size: 25px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
         }
-
-        .header h1 {
-            font-size: 24px;
-            margin-bottom: 5px;
-            font-weight: 700;
-        }
-
-        .header p {
-            font-size: 13px;
-            opacity: 0.9;
-        }
-
-        .main-content {
-            padding: 15px;
-        }
+        .header h1 { font-size: 25px; margin-bottom: 6px; font-weight: 800; }
+        .header p { font-size: 13px; opacity: 0.9; }
 
         .card {
             background: #FFFDF0;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 15px;
+            padding: 22px;
+            border-radius: 16px;
             border: 2px solid #F2CE3E;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.16);
         }
 
         .card h2 {
             color: #1B2358;
-            font-size: 18px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .card h2 i {
-            color: #EBC20E;
-            font-size: 22px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .stat-box {
-            background: white;
-            padding: 12px;
-            border-radius: 8px;
+            font-size: 20px;
             text-align: center;
-            border: 1px solid #F2CE3E;
+            margin-bottom: 8px;
         }
+        .card h2 i { color: #EBC20E; margin-right: 7px; }
+        .intro { color: #666; text-align: center; font-size: 13px; line-height: 1.6; margin-bottom: 18px; }
 
-        .stat-value {
-            font-size: 24px;
-            font-weight: 700;
-            color: #EBC20E;
-        }
-
-        .stat-label {
-            font-size: 11px;
-            color: #666;
-            margin-top: 5px;
-            font-weight: 600;
-        }
-
-        .referral-link {
-            background: white;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 12px;
+        .link-box {
             display: flex;
             gap: 8px;
+            padding: 10px;
+            margin-bottom: 12px;
+            background: white;
             border: 1px solid #F2CE3E;
+            border-radius: 10px;
         }
-
-        .referral-link input {
+        .link-box input {
+            min-width: 0;
             flex: 1;
-            border: none;
-            font-family: monospace;
-            font-size: 11px;
-            background: transparent;
-            outline: none;
-        }
-
-        .copy-btn {
-            background: #EBC20E;
-            color: #1B2358;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 12px;
-            white-space: nowrap;
-        }
-
-        .copy-btn:active {
-            transform: scale(0.95);
-        }
-
-        .share-btn {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            background: linear-gradient(135deg, #1B2358 0%, #B81D28 100%);
-            color: white;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: 0.2s;
-        }
-
-        .share-btn:active {
-            transform: scale(0.98);
-        }
-
-        .friend-share-btn {
-            margin-top: 10px;
-            background: #FFFDF0;
-            color: #1B2358;
-            border: 2px solid #EBC20E;
-            box-shadow: 0 3px 0 rgba(235,194,14,0.2);
-        }
-
-        .friend-share-btn:hover {
-            background: #fff8c9;
-        }
-
-        .share-helper {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin: 12px 0 0;
-            padding: 10px 12px;
-            border-radius: 8px;
-            background: rgba(235,194,14,0.14);
-            color: #1B2358;
-            font-size: 12px;
-            line-height: 1.45;
-        }
-
-        .share-helper i {
-            color: #B81D28;
-            font-size: 16px;
-        }
-
-        .reward-item {
-            background: white;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-left: 3px solid #EBC20E;
-            border: 1px solid #F2CE3E;
-        }
-
-        .reward-item-name {
-            font-weight: 600;
-            color: #1B2358;
-            font-size: 13px;
-        }
-
-        .reward-item-amount {
-            font-size: 16px;
-            font-weight: 700;
-            color: #EBC20E;
-        }
-
-        .reward-item-date {
-            font-size: 11px;
-            color: #999;
-            margin-top: 3px;
-        }
-
-        .admin-section {
-            background: #FFFDF0;
-            padding: 20px;
-            border-radius: 12px;
-            border: 2px solid #F2CE3E;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .admin-section h3 {
-            color: #1B2358;
-            font-size: 18px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .admin-section h3 i {
-            color: #EBC20E;
-        }
-
-        .admin-info {
-            background: white;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 12px;
-            font-size: 12px;
-            color: #666;
-            line-height: 1.6;
-            border: 1px solid #F2CE3E;
-        }
-
-        .admin-posts {
-            background: white;
-            border-radius: 8px;
-            max-height: 300px;
-            overflow-y: auto;
-            margin-bottom: 12px;
-            border: 1px solid #F2CE3E;
-        }
-
-        .admin-post-item {
-            padding: 12px;
-            border-bottom: 1px solid #F2CE3E;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .admin-post-item:last-child {
-            border-bottom: none;
-        }
-
-        .admin-post-info {
-            flex: 1;
-        }
-
-        .admin-post-title {
-            font-weight: 600;
-            color: #1B2358;
-            font-size: 13px;
-            margin-bottom: 3px;
-        }
-
-        .admin-post-time {
-            font-size: 11px;
-            color: #999;
-        }
-
-        .admin-post-reward {
-            font-size: 16px;
-            font-weight: 700;
-            color: #EBC20E;
-            margin-right: 10px;
-        }
-
-        .claim-btn {
-            background: #EBC20E;
-            color: #1B2358;
-            border: none;
-            padding: 6px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 11px;
-            white-space: nowrap;
-        }
-
-        .claim-btn:active {
-            transform: scale(0.95);
-        }
-
-        .claim-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-
-        .admin-contact-btn {
-            width: 100%;
-            background: linear-gradient(135deg, #1B2358 0%, #B81D28 100%);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: 0.2s;
-        }
-
-        .admin-contact-btn:active {
-            transform: scale(0.98);
-        }
-
-        .share-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
-        }
-
-        .share-modal.show {
-            display: flex;
-        }
-
-        .share-modal-content {
-            background: #FFFDF0;
-            padding: 20px;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 400px;
-            border: 2px solid #F2CE3E;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-        }
-
-        .share-modal-content h3 {
-            color: #1B2358;
-            margin-bottom: 15px;
-            text-align: center;
-            font-size: 18px;
-        }
-
-        .share-modal-subtitle {
-            color: #666;
-            text-align: center;
-            font-size: 12px;
-            line-height: 1.5;
-            margin: -7px 4px 15px;
-        }
-
-        .share-modal-btn:hover {
-            filter: brightness(1.06);
-        }
-
-        .share-modal-content .modal-close {
-            float: right;
             border: 0;
+            outline: 0;
             background: transparent;
-            color: #999;
-            font-size: 18px;
-            cursor: pointer;
-            margin: -5px -4px 0 0;
+            color: #1B2358;
+            font: 11px monospace;
         }
 
-        .share-modal-buttons {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-            max-height: 62vh;
-            overflow-y: auto;
-            padding-right: 2px;
-        }
-
-        .share-modal-btn {
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
+        button, .admin-contact {
+            width: 100%;
+            border: 0;
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 14px;
+            font-weight: 800;
             cursor: pointer;
-            font-weight: 700;
-            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 9px;
+            transition: transform .2s, filter .2s;
+            text-decoration: none;
+        }
+        button:active, .admin-contact:active { transform: scale(.98); }
+        button:hover, .admin-contact:hover { filter: brightness(1.05); }
+
+        .copy-btn { width: auto; padding: 9px 12px; background: #EBC20E; color: #1B2358; font-size: 12px; }
+        .friend-btn { color: white; background: linear-gradient(135deg, #1B2358 0%, #B81D28 100%); }
+        .all-app-btn { margin-top: 10px; color: #1B2358; background: #FFFDF0; border: 2px solid #EBC20E; }
+        .admin-contact { margin-top: 16px; color: white; background: linear-gradient(135deg, #1B2358 0%, #B81D28 100%); }
+
+        .hint {
+            display: flex;
             gap: 8px;
-            font-size: 14px;
-            transition: 0.2s;
-        }
-
-        .share-modal-btn:active {
-            transform: scale(0.98);
-        }
-
-        .share-modal-btn-fb { background: linear-gradient(135deg, #1877F2 0%, #0a66c2 100%); }
-        .share-modal-btn-tt { background: linear-gradient(135deg, #000 0%, #333 100%); }
-        .share-modal-btn-wa { background: linear-gradient(135deg, #25D366 0%, #1ba85c 100%); }
-        .share-modal-btn-close { background: #999; }
-        .share-modal-btn-all { background: linear-gradient(135deg, #1B2358 0%, #B81D28 100%); }
-        .share-modal-btn-ms { background: #0084ff; }
-        .share-modal-btn-tg { background: #229ED9; }
-        .share-modal-btn-viber { background: #7360F2; }
-        .share-modal-btn-x { background: #222; }
-        .share-modal-btn-email { background: #666; }
-        .share-modal-note {
-            margin-top: 12px;
-            text-align: center;
-            color: #777;
-            font-size: 11px;
+            align-items: flex-start;
+            margin-top: 14px;
+            padding: 11px 12px;
+            border-radius: 9px;
+            background: rgba(235,194,14,.14);
+            color: #1B2358;
+            font-size: 12px;
             line-height: 1.5;
         }
+        .hint i { color: #B81D28; margin-top: 2px; }
 
-        .notification {
+        .notice {
             position: fixed;
-            bottom: 20px;
             left: 15px;
             right: 15px;
-            background: white;
-            padding: 12px 15px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            z-index: 3000;
+            bottom: 18px;
             display: none;
-            animation: slideUp 0.3s;
+            padding: 12px 15px;
             border-left: 3px solid #EBC20E;
+            border-radius: 9px;
+            background: white;
+            color: #1B2358;
+            box-shadow: 0 5px 18px rgba(0,0,0,.2);
+            text-align: center;
             font-size: 13px;
+            z-index: 10;
         }
+        .notice.show { display: block; }
 
-        .notification.show {
-            display: block;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(100px); }
-            to { transform: translateY(0); }
-        }
-
-        @media (max-width: 480px) {
-            .stats-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
+        @media (max-width: 380px) {
+            .card { padding: 18px 15px; }
+            .header h1 { font-size: 22px; }
+            .link-box input { font-size: 10px; }
         }
     </style>
 </head>
 <body>
+    <main class="container">
+        <header class="header">
+            <div class="logo"><i class="fas fa-share-nodes"></i></div>
+            <h1>DailyWage Share</h1>
+            <p>သူငယ်ချင်းများကို App Link မျှဝေပါ</p>
+        </header>
 
-    <div class="container">
-        <div class="header">
-            <h1>
-                <i class="fas fa-share-alt"></i>
-                DailyWage Share & Earn
-            </h1>
-            <p>Share APK Link • Get Rewards</p>
-        </div>
+        <section class="card">
+            <h2><i class="fas fa-user-plus"></i>သူငယ်ချင်းကိုမျှဝေပါ</h2>
+            <p class="intro">DailyWage APK ကို သူငယ်ချင်းတွေဆီ အလွယ်တကူ ပို့လိုက်ပါ။</p>
 
-        <div class="main-content">
-            <!-- Share Section -->
-            <div class="card">
-                <h2>
-                    <i class="fas fa-share-nodes"></i>
-                    Share & Earn
-                </h2>
-
-                <div class="stats-grid">
-                    <div class="stat-box">
-                        <div class="stat-value" id="shareCount">0</div>
-                        <div class="stat-label">Shares</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-value" id="earnedAmount">฿0</div>
-                        <div class="stat-label">Earned</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-value" id="pendingRewards">0</div>
-                        <div class="stat-label">Pending</div>
-                    </div>
-                </div>
-
-                <div class="referral-link">
-                    <input type="text" id="referralLink" readonly placeholder="Your link">
-                    <button class="copy-btn" onclick="copyLink()">
-                        <i class="fas fa-copy"></i> Copy
-                    </button>
-                </div>
-
-                <button class="share-btn" onclick="openShareModal()">
-                    <i class="fas fa-share"></i> Share APK Link
-                </button>
-
-                <button class="share-btn friend-share-btn" onclick="shareWithFriend()">
-                    <i class="fas fa-user-plus"></i> သူငယ်ချင်းကိုမျှဝေပါ
-                </button>
-
-                <div class="share-helper">
-                    <i class="fas fa-lightbulb"></i>
-                    <span>သူငယ်ချင်းတစ်ယောက်ကို link ပို့ပြီး DailyWage ကို အတူတူအသုံးပြုလိုက်ပါ။</span>
-                </div>
-
-                <h3 style="margin-top: 15px; margin-bottom: 12px; color: #1B2358; font-weight: 700; font-size: 14px;">
-                    <i class="fas fa-history"></i> Share History
-                </h3>
-                <div id="shareHistory" style="max-height: 200px; overflow-y: auto;">
-                    <div style="text-align: center; color: #999; padding: 15px; font-size: 12px;">
-                        No shares yet
-                    </div>
-                </div>
+            <div class="link-box">
+                <input id="appLink" type="text" readonly value="https://daily-y-app.github.io/Apk-download" aria-label="DailyWage APK link">
+                <button class="copy-btn" onclick="copyLink()"><i class="fas fa-copy"></i> Copy</button>
             </div>
 
-            <!-- Rewards Section -->
-            <div class="admin-section">
-                <h3>
-                    <i class="fas fa-gift"></i>
-                    Claim Rewards
-                </h3>
+            <button class="friend-btn" onclick="shareLink()">
+                <i class="fas fa-user-plus"></i> သူငယ်ချင်းကိုမျှဝေပါ
+            </button>
+            <button class="all-app-btn" onclick="shareLink()">
+                <i class="fas fa-mobile-screen-button"></i> All Apps / More
+            </button>
 
-                <div class="admin-info">
-                    ✅ Share APK link on social media<br>
-                    ✅ Admin posts rewards<br>
-                    ✅ Click "Claim" to get reward
-                </div>
-
-                <div class="admin-posts" id="adminPosts">
-                    <div style="text-align: center; color: #999; padding: 15px; font-size: 12px;">
-                        <i class="fas fa-inbox"></i> No rewards yet
-                    </div>
-                </div>
-
-                <div style="margin-bottom: 12px; padding: 12px; background: white; border-radius: 8px; border: 1px solid #F2CE3E;">
-                    <h4 style="color: #1B2358; margin-bottom: 8px; font-weight: 700; font-size: 12px;">Admin Add Reward:</h4>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
-                        <input type="text" id="rewardTitle" placeholder="Title" style="padding: 8px; border: 1px solid #F2CE3E; border-radius: 6px; background: #FFFDF0; font-size: 12px;">
-                        <input type="number" id="rewardAmount" placeholder="฿" style="padding: 8px; border: 1px solid #F2CE3E; border-radius: 6px; background: #FFFDF0; font-size: 12px;">
-                    </div>
-                    <button onclick="addRewardPost()" style="width: 100%; background: #EBC20E; color: #1B2358; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 12px; padding: 8px;">
-                        <i class="fas fa-plus"></i> Add
-                    </button>
-                </div>
-
-                <a href="https://www.facebook.com/people/Pwint-Phyu/pfbid0EY52WAUuMgCMJWcX3sKGxBzmoMD8D7c7xixUKgX95PsRaC93je6QpVH2SUXiT8bxl/" target="_blank" class="admin-contact-btn">
-                    <i class="fab fa-facebook"></i> Contact Admin
-                </a>
+            <div class="hint">
+                <i class="fas fa-lightbulb"></i>
+                <span>All Apps / More ကိုနှိပ်ပြီး ဖုန်းထဲက မျှဝေနိုင်တဲ့ app ကိုရွေးပါ။</span>
             </div>
-        </div>
-    </div>
 
-    <!-- Share Modal -->
-    <div id="shareModal" class="share-modal">
-        <div class="share-modal-content">
-            <button class="modal-close" onclick="closeShareModal()" aria-label="Close share options"><i class="fas fa-times"></i></button>
-            <h3>
-                <i class="fas fa-share-nodes"></i>
-                သူငယ်ချင်းကိုမျှဝေပါ
-            </h3>
-            <p class="share-modal-subtitle">သင်နှစ်သက်ရာ app ကိုရွေးပြီး ဒီ link ကိုပို့ပါ</p>
-            <div class="share-modal-buttons">
-                <button class="share-modal-btn share-modal-btn-all" onclick="shareViaDevice()">
-                    <i class="fas fa-mobile-screen-button"></i> All Apps / More
-                </button>
-                <button class="share-modal-btn share-modal-btn-fb" onclick="shareToFacebook()">
-                    <i class="fab fa-facebook"></i> Facebook
-                </button>
-                <button class="share-modal-btn share-modal-btn-ms" onclick="shareToMessenger()">
-                    <i class="fab fa-facebook-messenger"></i> Messenger
-                </button>
-                <button class="share-modal-btn share-modal-btn-tt" onclick="shareToTikTok()">
-                    <i class="fab fa-tiktok"></i> TikTok
-                </button>
-                <button class="share-modal-btn share-modal-btn-wa" onclick="shareToWhatsApp()">
-                    <i class="fab fa-whatsapp"></i> WhatsApp
-                </button>
-                <button class="share-modal-btn share-modal-btn-tg" onclick="shareToTelegram()">
-                    <i class="fab fa-telegram"></i> Telegram
-                </button>
-                <button class="share-modal-btn share-modal-btn-viber" onclick="shareToViber()">
-                    <i class="fab fa-viber"></i> Viber
-                </button>
-                <button class="share-modal-btn share-modal-btn-x" onclick="shareToX()">
-                    <i class="fab fa-x-twitter"></i> X / Twitter
-                </button>
-                <button class="share-modal-btn share-modal-btn-email" onclick="shareByEmail()">
-                    <i class="fas fa-envelope"></i> Email
-                </button>
-                <button class="share-modal-btn share-modal-btn-close" onclick="closeShareModal()">
-                    <i class="fas fa-times"></i> Close
-                </button>
-            </div>
-            <div class="share-modal-note">All Apps / More ကိုနှိပ်ရင် ဖုန်းထဲက ရှဲနိုင်တဲ့ app အားလုံးကို ပြပါမယ်။</div>
-        </div>
-    </div>
+            <a class="admin-contact" href="https://www.facebook.com/people/Pwint-Phyu/pfbid0EY52WAUuMgCMJWcX3sKGxBzmoMD8D7c7xixUKgX95PsRaC93je6QpVH2SUXiT8bxl/" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-facebook"></i> Admin ကိုဆက်သွယ်ရန်
+            </a>
+        </section>
+    </main>
 
-    <div id="notification" class="notification"></div>
+    <div id="notice" class="notice" role="status"></div>
 
     <script>
-        // Initialize
-        let deviceId = localStorage.getItem('deviceId');
-        if (!deviceId) {
-            deviceId = 'USER-' + Math.random().toString(36).substr(2, 9).toUpperCase() + '-' + Date.now();
-            localStorage.setItem('deviceId', deviceId);
-        }
-
         const appLink = 'https://daily-y-app.github.io/Apk-download';
-        const referralLink = appLink + '?ref=' + encodeURIComponent(deviceId);
-        document.getElementById('referralLink').value = referralLink;
-
-        // Copy Link
-        function copyLink() {
-            const link = document.getElementById('referralLink');
-            link.select();
-            document.execCommand('copy');
-            showNotification('✅ Link copied!');
-        }
-
-        // Share Modal
-        function openShareModal() {
-            document.getElementById('shareModal').classList.add('show');
-        }
-
-        function shareWithFriend() {
-            openShareModal();
-        }
-
-        function closeShareModal() {
-            document.getElementById('shareModal').classList.remove('show');
-        }
-
-        document.getElementById('shareModal').addEventListener('click', function(event) {
-            if (event.target === this) closeShareModal();
-        });
-
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') closeShareModal();
-        });
-
-        // Smart sharing helpers
-        const shareTitle = 'DailyWage App - Earn Money Daily!';
-        const shareText = '🚀 DailyWage App - Earn Money Daily!\n\nShare this link and earn ฿10 per share!\n' + referralLink + '\n\n💰 Get ฿0.2 daily bonus + withdraw via PromptPay!';
+        const shareTitle = 'DailyWage APK';
+        const shareText = 'DailyWage APK ကို ဒီလင့်ကနေ Download လုပ်ပါ။\n' + appLink;
 
         async function copyText(text) {
             if (navigator.clipboard && window.isSecureContext) {
                 await navigator.clipboard.writeText(text);
-                return true;
+                return;
             }
             const helper = document.createElement('textarea');
             helper.value = text;
@@ -673,208 +185,37 @@
             document.body.appendChild(helper);
             helper.focus();
             helper.select();
-            const copied = document.execCommand('copy');
+            document.execCommand('copy');
             helper.remove();
-            return copied;
         }
 
-        async function shareViaDevice() {
+        async function copyLink() {
+            try {
+                await copyText(appLink);
+                showNotice('✅ Link copied ပါပြီ။ သူငယ်ချင်းထံ Paste လုပ်ပြီး ပို့နိုင်ပါပြီ။');
+            } catch (error) {
+                showNotice('Link copy မအောင်မြင်ပါ။ Link ကိုဖိထားပြီး Copy လုပ်ပါ။');
+            }
+        }
+
+        async function shareLink() {
             if (navigator.share) {
                 try {
-                    await navigator.share({ title: shareTitle, text: shareText, url: referralLink });
-                    recordShare('All Apps');
-                    closeShareModal();
+                    await navigator.share({ title: shareTitle, text: shareText, url: appLink });
                 } catch (error) {
-                    if (error.name !== 'AbortError') showNotification('Share မအောင်မြင်ပါ။ ထပ်စမ်းကြည့်ပါ။');
+                    if (error.name !== 'AbortError') showNotice('Share မအောင်မြင်ပါ။ ထပ်စမ်းကြည့်ပါ။');
                 }
                 return;
             }
-            await copyText(shareText);
-            recordShare('All Apps');
-            closeShareModal();
-            showNotification('Link copied! သင်နှစ်သက်ရာ app ထဲ Paste လုပ်ပြီး ရှဲနိုင်ပါပြီ။');
+            await copyLink();
         }
 
-        function openShareUrl(url, platform) {
-            window.open(url, '_blank', 'noopener,noreferrer');
-            recordShare(platform);
-            closeShareModal();
+        function showNotice(message) {
+            const notice = document.getElementById('notice');
+            notice.textContent = message;
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2800);
         }
-
-        function shareToFacebook() {
-            const url = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(referralLink) + '&quote=' + encodeURIComponent(shareText);
-            openShareUrl(url, 'Facebook');
-        }
-
-        async function shareToMessenger() {
-            await copyText(shareText);
-            window.open('https://www.messenger.com/', '_blank', 'noopener,noreferrer');
-            recordShare('Messenger');
-            closeShareModal();
-            showNotification('Link copied! Messenger ထဲ Paste လုပ်ပြီး ပို့နိုင်ပါပြီ။');
-        }
-
-        async function shareToTikTok() {
-            await copyText(shareText);
-            window.open('https://www.tiktok.com/', '_blank', 'noopener,noreferrer');
-            recordShare('TikTok');
-            closeShareModal();
-            showNotification('Link copied! TikTok ထဲ Paste လုပ်ပြီး ရှဲနိုင်ပါပြီ။');
-        }
-
-        function shareToWhatsApp() {
-            openShareUrl('https://wa.me/?text=' + encodeURIComponent(shareText), 'WhatsApp');
-        }
-
-        function shareToTelegram() {
-            const url = 'https://t.me/share/url?url=' + encodeURIComponent(referralLink) + '&text=' + encodeURIComponent(shareText);
-            openShareUrl(url, 'Telegram');
-        }
-
-        function shareToViber() {
-            window.location.href = 'viber://forward?text=' + encodeURIComponent(shareText);
-            recordShare('Viber');
-            closeShareModal();
-        }
-
-        function shareToX() {
-            const url = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText) + '&url=' + encodeURIComponent(referralLink);
-            openShareUrl(url, 'X');
-        }
-
-        function shareByEmail() {
-            const url = 'mailto:?subject=' + encodeURIComponent(shareTitle) + '&body=' + encodeURIComponent(shareText);
-            window.location.href = url;
-            recordShare('Email');
-            closeShareModal();
-        }
-
-        // Record Share
-        function recordShare(platform) {
-            let shares = JSON.parse(localStorage.getItem('shares_' + deviceId) || '[]');
-            shares.push({
-                platform: platform,
-                timestamp: new Date().toISOString(),
-                reward: 10
-            });
-            localStorage.setItem('shares_' + deviceId, JSON.stringify(shares));
-            updateStats();
-            showNotification('✅ Share recorded! Earned ฿10');
-        }
-
-        // Update Stats
-        function updateStats() {
-            const shares = JSON.parse(localStorage.getItem('shares_' + deviceId) || '[]');
-            const totalReward = shares.length * 10;
-            document.getElementById('shareCount').textContent = shares.length;
-            document.getElementById('earnedAmount').textContent = '฿' + totalReward;
-            updateShareHistory();
-        }
-
-        // Update Share History
-        function updateShareHistory() {
-            const shares = JSON.parse(localStorage.getItem('shares_' + deviceId) || '[]');
-            const historyDiv = document.getElementById('shareHistory');
-
-            if (shares.length === 0) {
-                historyDiv.innerHTML = '<div style="text-align: center; color: #999; padding: 15px; font-size: 12px;">No shares yet</div>';
-                return;
-            }
-
-            let html = '';
-            shares.forEach((share) => {
-                const date = new Date(share.timestamp).toLocaleString();
-                html += `
-                    <div class="reward-item">
-                        <div>
-                            <div class="reward-item-name"><i class="fab fa-${share.platform.toLowerCase()}"></i> ${share.platform}</div>
-                            <div class="reward-item-date">${date}</div>
-                        </div>
-                        <div class="reward-item-amount">฿${share.reward}</div>
-                    </div>
-                `;
-            });
-            historyDiv.innerHTML = html;
-        }
-
-        // Admin Functions
-        function addRewardPost() {
-            const title = document.getElementById('rewardTitle').value;
-            const amount = document.getElementById('rewardAmount').value;
-
-            if (!title || !amount) {
-                showNotification('❌ Fill all fields');
-                return;
-            }
-
-            let posts = JSON.parse(localStorage.getItem('adminPosts') || '[]');
-            posts.push({
-                title: title,
-                amount: amount,
-                timestamp: new Date().toISOString(),
-                claimed: false
-            });
-            localStorage.setItem('adminPosts', JSON.stringify(posts));
-
-            document.getElementById('rewardTitle').value = '';
-            document.getElementById('rewardAmount').value = '';
-
-            updateAdminPosts();
-            showNotification('✅ Reward added!');
-        }
-
-        function updateAdminPosts() {
-            const posts = JSON.parse(localStorage.getItem('adminPosts') || '[]');
-            const adminDiv = document.getElementById('adminPosts');
-
-            if (posts.length === 0) {
-                adminDiv.innerHTML = '<div style="text-align: center; color: #999; padding: 15px; font-size: 12px;"><i class="fas fa-inbox"></i> No rewards yet</div>';
-                return;
-            }
-
-            let html = '';
-            posts.forEach((post, index) => {
-                const date = new Date(post.timestamp).toLocaleString();
-                html += `
-                    <div class="admin-post-item">
-                        <div class="admin-post-info">
-                            <div class="admin-post-title">${post.title}</div>
-                            <div class="admin-post-time">${date}</div>
-                        </div>
-                        <div class="admin-post-reward">฿${post.amount}</div>
-                        <button class="claim-btn" onclick="claimReward(${index})" ${post.claimed ? 'disabled' : ''}>
-                            ${post.claimed ? '✅' : 'Claim'}
-                        </button>
-                    </div>
-                `;
-            });
-            adminDiv.innerHTML = html;
-        }
-
-        function claimReward(index) {
-            let posts = JSON.parse(localStorage.getItem('adminPosts') || '[]');
-            if (posts[index]) {
-                posts[index].claimed = true;
-                localStorage.setItem('adminPosts', JSON.stringify(posts));
-                updateAdminPosts();
-                showNotification('✅ Reward claimed! Contact admin.');
-            }
-        }
-
-        // Notification
-        function showNotification(message) {
-            const notif = document.getElementById('notification');
-            notif.textContent = message;
-            notif.classList.add('show');
-            setTimeout(() => { notif.classList.remove('show'); }, 2500);
-        }
-
-        // Initialize on Load
-        window.addEventListener('load', () => {
-            updateStats();
-            updateAdminPosts();
-        });
     </script>
-
 </body>
 </html>
