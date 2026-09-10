@@ -89,22 +89,45 @@
 
         .copy-btn { width: auto; padding: 9px 12px; background: #EBC20E; color: #1B2358; font-size: 12px; }
         .friend-btn { color: white; background: linear-gradient(135deg, #1B2358 0%, #B81D28 100%); }
-        .all-app-btn { margin-top: 10px; color: #1B2358; background: #FFFDF0; border: 2px solid #EBC20E; }
         .admin-contact { margin-top: 16px; color: white; background: linear-gradient(135deg, #1B2358 0%, #B81D28 100%); }
 
-        .hint {
+        .banner-ad {
             display: flex;
-            gap: 8px;
-            align-items: flex-start;
-            margin-top: 14px;
-            padding: 11px 12px;
-            border-radius: 9px;
-            background: rgba(235,194,14,.14);
-            color: #1B2358;
-            font-size: 12px;
-            line-height: 1.5;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+            padding: 15px 16px;
+            border: 2px solid #F2CE3E;
+            border-radius: 14px;
+            color: white;
+            background: linear-gradient(135deg, #1B2358 0%, #B81D28 100%);
+            box-shadow: 0 7px 18px rgba(0,0,0,.16);
+            text-decoration: none;
         }
-        .hint i { color: #B81D28; margin-top: 2px; }
+        .banner-ad-copy { min-width: 0; }
+        .banner-ad-label {
+            display: inline-block;
+            margin-bottom: 5px;
+            color: #1B2358;
+            background: #EBC20E;
+            border-radius: 999px;
+            padding: 3px 8px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+        .banner-ad h3 { font-size: 16px; margin-bottom: 3px; }
+        .banner-ad p { font-size: 11px; opacity: .9; line-height: 1.4; }
+        .banner-ad-arrow {
+            flex: 0 0 35px;
+            width: 35px;
+            height: 35px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            color: #1B2358;
+            background: #EBC20E;
+        }
 
         .notice {
             position: fixed;
@@ -139,6 +162,15 @@
             <p>သူငယ်ချင်းများကို App Link မျှဝေပါ</p>
         </header>
 
+        <a class="banner-ad" href="https://daily-y-app.github.io/Apk-download" target="_blank" rel="noopener noreferrer">
+            <div class="banner-ad-copy">
+                <span class="banner-ad-label">DAILYWAGE APP</span>
+                <h3>နေ့စဉ်ဝင်ငွေအတွက် စတင်လိုက်ပါ</h3>
+                <p>APK ကို Download လုပ်ပြီး ယနေ့ပဲ အသုံးပြုပါ</p>
+            </div>
+            <span class="banner-ad-arrow"><i class="fas fa-arrow-right"></i></span>
+        </a>
+
         <section class="card">
             <h2><i class="fas fa-user-plus"></i>သူငယ်ချင်းကိုမျှဝေပါ</h2>
             <p class="intro">DailyWage APK ကို သူငယ်ချင်းတွေဆီ အလွယ်တကူ ပို့လိုက်ပါ။</p>
@@ -151,14 +183,6 @@
             <button class="friend-btn" onclick="shareLink()">
                 <i class="fas fa-user-plus"></i> သူငယ်ချင်းကိုမျှဝေပါ
             </button>
-            <button class="all-app-btn" onclick="shareLink()">
-                <i class="fas fa-mobile-screen-button"></i> All Apps / More
-            </button>
-
-            <div class="hint">
-                <i class="fas fa-lightbulb"></i>
-                <span>All Apps / More ကိုနှိပ်ပြီး ဖုန်းထဲက မျှဝေနိုင်တဲ့ app ကိုရွေးပါ။</span>
-            </div>
 
             <a class="admin-contact" href="https://www.facebook.com/people/Pwint-Phyu/pfbid0EY52WAUuMgCMJWcX3sKGxBzmoMD8D7c7xixUKgX95PsRaC93je6QpVH2SUXiT8bxl/" target="_blank" rel="noopener noreferrer">
                 <i class="fab fa-facebook"></i> Admin ကိုဆက်သွယ်ရန်
