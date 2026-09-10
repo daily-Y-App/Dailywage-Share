@@ -16,7 +16,7 @@
             color: #333;
         }
 
-        .container { max-width: 520px; margin: 0 auto; padding: 18px 15px 118px; }
+        .container { max-width: 520px; margin: 0 auto; padding: 18px 15px 150px; }
 
         .header { text-align: center; color: white; padding: 18px 8px 22px; }
         .header .logo {
@@ -93,31 +93,23 @@
         .friend-btn { color: white; background: linear-gradient(135deg, #1B2358 0%, #B81D28 100%); }
         .admin-contact { margin-top: 16px; color: white; background: linear-gradient(135deg, #1B2358 0%, #B81D28 100%); }
 
-        .bottom-ad {
+        .ad-banner-footer {
             position: fixed;
-            left: 0;
-            right: 0;
             bottom: 0;
-            min-height: 90px;
-            padding: 6px 10px;
+            left: 0;
+            width: 100%;
+            min-height: 120px;
+            background: #fff;
+            z-index: 9999;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
+            border-top: 1px solid #ddd;
+            padding: 5px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
             overflow: hidden;
-            background: rgba(255,253,240,.98);
-            border-top: 2px solid #F2CE3E;
-            box-shadow: 0 -5px 18px rgba(0,0,0,.16);
-            z-index: 20;
         }
-        .bottom-ad-label {
-            position: absolute;
-            top: 1px;
-            left: 8px;
-            color: #777;
-            font-size: 8px;
-            letter-spacing: .4px;
-        }
-        .bottom-ad-script { width: 100%; max-width: 520px; min-height: 72px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
 
         .banner-ad {
             display: flex;
@@ -220,12 +212,22 @@
 
     <div id="notice" class="notice" role="status"></div>
 
-    <aside class="bottom-ad" aria-label="Advertisement">
-        <span class="bottom-ad-label">ADVERTISEMENT</span>
-        <div class="bottom-ad-script">
-            <script async src="https://pl28344759.effectivegatecpm.com/eb/25/40/eb25401554277dcd898bb0414f0023b0.js"></script>
-        </div>
-    </aside>
+    <div class="ad-banner-footer" aria-label="Advertisement">
+        <!-- First Ad -->
+        <script type="text/javascript" src="https://pl28344759.effectivegatecpm.com/eb/25/40/eb25401554277dcd898bb0414f0023b0.js"></script>
+
+        <!-- Second Ad -->
+        <script>
+            atOptions = {
+                'key' : '1f368fdf67bf1944d873877b1354fd14',
+                'format' : 'iframe',
+                'height' : 50,
+                'width' : 320,
+                'params' : {}
+            };
+        </script>
+        <script src="https://www.highperformanceformat.com/1f368fdf67bf1944d873877b1354fd14/invoke.js"></script>
+    </div>
 
     <script>
         const appLink = 'https://daily-y-app.github.io/Apk-download';
