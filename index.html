@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DailyWage - Share APK</title>
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/mrKY1fwZ/1024x1024.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -15,7 +16,7 @@
             color: #333;
         }
 
-        .container { max-width: 520px; margin: 0 auto; padding: 18px 15px 28px; }
+        .container { max-width: 520px; margin: 0 auto; padding: 18px 15px 118px; }
 
         .header { text-align: center; color: white; padding: 18px 8px 22px; }
         .header .logo {
@@ -25,11 +26,12 @@
             display: grid;
             place-items: center;
             border-radius: 18px;
+            overflow: hidden;
             background: #EBC20E;
             color: #1B2358;
-            font-size: 25px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.2);
         }
+        .header .logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .header h1 { font-size: 25px; margin-bottom: 6px; font-weight: 800; }
         .header p { font-size: 13px; opacity: 0.9; }
 
@@ -91,6 +93,32 @@
         .friend-btn { color: white; background: linear-gradient(135deg, #1B2358 0%, #B81D28 100%); }
         .admin-contact { margin-top: 16px; color: white; background: linear-gradient(135deg, #1B2358 0%, #B81D28 100%); }
 
+        .bottom-ad {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            min-height: 90px;
+            padding: 6px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: rgba(255,253,240,.98);
+            border-top: 2px solid #F2CE3E;
+            box-shadow: 0 -5px 18px rgba(0,0,0,.16);
+            z-index: 20;
+        }
+        .bottom-ad-label {
+            position: absolute;
+            top: 1px;
+            left: 8px;
+            color: #777;
+            font-size: 8px;
+            letter-spacing: .4px;
+        }
+        .bottom-ad-script { width: 100%; max-width: 520px; min-height: 72px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+
         .banner-ad {
             display: flex;
             align-items: center;
@@ -133,7 +161,7 @@
             position: fixed;
             left: 15px;
             right: 15px;
-            bottom: 18px;
+            bottom: 108px;
             display: none;
             padding: 12px 15px;
             border-left: 3px solid #EBC20E;
@@ -157,7 +185,7 @@
 <body>
     <main class="container">
         <header class="header">
-            <div class="logo"><i class="fas fa-share-nodes"></i></div>
+            <div class="logo"><img src="https://i.postimg.cc/mrKY1fwZ/1024x1024.png" alt="DailyWage app icon"></div>
             <h1>DailyWage Share</h1>
             <p>သူငယ်ချင်းများကို App Link မျှဝေပါ</p>
         </header>
@@ -191,6 +219,13 @@
     </main>
 
     <div id="notice" class="notice" role="status"></div>
+
+    <aside class="bottom-ad" aria-label="Advertisement">
+        <span class="bottom-ad-label">ADVERTISEMENT</span>
+        <div class="bottom-ad-script">
+            <script async src="https://pl28344759.effectivegatecpm.com/eb/25/40/eb25401554277dcd898bb0414f0023b0.js"></script>
+        </div>
+    </aside>
 
     <script>
         const appLink = 'https://daily-y-app.github.io/Apk-download';
