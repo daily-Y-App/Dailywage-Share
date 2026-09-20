@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DailyWage - Share APK</title>
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/mrKY1fwZ/1024x1024.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1B2358 0%, #B81D28 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 520px;
+            margin: 0 auto;
+            padding: 18px 15px calc(76px + env(safe-area-inset-bottom));
+        }
+
+        .header { text-align: center; color: white; padding: 18px 8px 22px; }
+        .header .logo {
+            width: 58px;
+            height: 58px;
+            margin: 0 auto 12px;
+            display: grid;
+            place-items: center;
+            border-radius: 18px;
+            overflow: hidden;
+            background: #EBC20E;
+            color: #1B2358;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        .header .logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .header h1 { font-size: 25px; margin-bottom: 6px; font-weight: 800; }
+        .header p { font-size: 13px; opacity: 0.9; }
+
+        .card {
+            background: #FFFDF0;
+            padding: 22px;
+            border-radius: 16px;
+            border: 2px solid #F2CE3E;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.16);
+        }
+
+        .card h2 {
+            color: #1B2358;
+            font-size: 20px;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        .card h2 i { color: #EBC20E; margin-right: 7px; }
+        .intro { color: #666; text-align: center; font-size: 13px; line-height: 1.6; margin-bottom: 18px; }
+
+        .link-box {
+            display: flex;
+            gap: 8px;
+            padding: 10px;
+            margin-bottom: 12px;
+            background: white;
+            border: 1px solid #F2CE3E;
+            border-radius: 10px;
+        }
+        .link-box input {
+            min-width: 0;
+            flex: 1;
+            border: 0;
+            outline: 0;
+            background: transparent;
+            color: #1B2358;
+            font: 11px monospace;
+        }
+
+        button, .admin-contact {
+            width: 100%;
+            border: 0;
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            transition: transform .2s, filter .2s;
+            text-decoration: none;
+        }
+        button:active, .admin-contact:active { transform: scale(.98); }
+        button:hover, .admin-contact:hover { filter: brightness(1.05); }
+
+        .copy-btn { width: auto; padding: 9px 12px; background: #EBC20E; color: #1B2358; font-size: 12px; }
+        .friend-btn { color: white; background: linear-gradient(135deg, #1B2358 0%, #B81D28 100%); }
+        .admin-contact { margin-top: 16px; color: white; background: linear-gradient(135deg, #1B2358 0%, #B81D28 100%); }
+
+        .ad-banner-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 56px;
+            min-height: 56px;
+            box-sizing: border-box;
+            background: #000;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-top: 1px solid #222;
+            padding: 3px 0 calc(3px + env(safe-area-inset-bottom));
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.18);
+            overflow: hidden;
+        }
+
+        .ad-banner-footer iframe { display: block; max-width: 100%; border: 0; }
+
+        .banner-ad {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+            padding: 15px 16px;
+            border: 2px solid #F2CE3E;
+            border-radius: 14px;
+            color: white;
+            background: linear-gradient(135deg, #1B2358 0%, #B81D28 100%);
+            box-shadow: 0 7px 18px rgba(0,0,0,.16);
+            text-decoration: none;
+        }
+        .banner-ad-copy { min-width: 0; }
+        .banner-ad-label {
+            display: inline-block;
+            margin-bottom: 5px;
+            color: #1B2358;
+            background: #EBC20E;
+            border-radius: 999px;
+            padding: 3px 8px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+        .banner-ad h3 { font-size: 16px; margin-bottom: 3px; }
+        .banner-ad p { font-size: 11px; opacity: .9; line-height: 1.4; }
+        .banner-ad-arrow {
+            flex: 0 0 35px;
+            width: 35px;
+            height: 35px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            color: #1B2358;
+            background: #EBC20E;
+        }
+
+        .notice {
+            position: fixed;
+            left: 15px;
+            right: 15px;
+            bottom: calc(66px + env(safe-area-inset-bottom));
+            display: none;
+            padding: 12px 15px;
+            border-left: 3px solid #EBC20E;
+            border-radius: 9px;
+            background: white;
+            color: #1B2358;
+            box-shadow: 0 5px 18px rgba(0,0,0,.2);
+            text-align: center;
+            font-size: 13px;
+            z-index: 10;
+        }
+        .notice.show { display: block; }
+
+        @media (max-width: 380px) {
+            .card { padding: 18px 15px; }
+            .header h1 { font-size: 22px; }
+            .link-box input { font-size: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <header class="header">
+            <div class="logo"><img src="https://i.postimg.cc/mrKY1fwZ/1024x1024.png" alt="DailyWage app icon"></div>
+            <h1>DailyWage Share</h1>
+            <p>သူငယ်ချင်းများကို App Link မျှဝေပါ</p>
+        </header>
+
+        <a class="banner-ad" href="https://daily-y-app.github.io/Apk-download" target="_blank" rel="noopener noreferrer">
+            <div class="banner-ad-copy">
+                <span class="banner-ad-label">DAILYWAGE APP</span>
+                <h3>နေ့စဉ်ဝင်ငွေအတွက် စတင်လိုက်ပါ</h3>
+                <p>APK ကို Download လုပ်ပြီး ယနေ့ပဲ အသုံးပြုပါ</p>
+            </div>
+            <span class="banner-ad-arrow"><i class="fas fa-arrow-right"></i></span>
+        </a>
+
+        <section class="card">
+            <h2><i class="fas fa-user-plus"></i>သူငယ်ချင်းကိုမျှဝေပါ</h2>
+            <p class="intro">DailyWage APK ကို သူငယ်ချင်းတွေဆီ အလွယ်တကူ ပို့လိုက်ပါ။</p>
+
+            <div class="link-box">
+                <input id="appLink" type="text" readonly value="https://daily-y-app.github.io/Apk-download" aria-label="DailyWage APK link">
+                <button class="copy-btn" onclick="copyLink()"><i class="fas fa-copy"></i> Copy</button>
+            </div>
+
+            <button class="friend-btn" onclick="shareLink()">
+                <i class="fas fa-user-plus"></i> သူငယ်ချင်းကိုမျှဝေပါ
+            </button>
+
+            <a class="admin-contact" href="https://www.facebook.com/people/Pwint-Phyu/pfbid0EY52WAUuMgCMJWcX3sKGxBzmoMD8D7c7xixUKgX95PsRaC93je6QpVH2SUXiT8bxl/" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-facebook"></i> Admin ကိုဆက်သွယ်ရန်
+            </a>
+        </section>
+    </main>
+
+    <div id="notice" class="notice" role="status"></div>
+
+    <div class="ad-banner-footer" aria-label="Advertisement">
+        <!-- First Ad -->
+        <script type="text/javascript" src="https://pl28344759.effectivegatecpm.com/eb/25/40/eb25401554277dcd898bb0414f0023b0.js"></script>
+
+        <!-- Second Ad -->
+        <script>
+            atOptions = {
+                'key' : '1f368fdf67bf1944d873877b1354fd14',
+                'format' : 'iframe',
+                'height' : 50,
+                'width' : 320,
+                'params' : {}
+            };
+        </script>
+        <script src="https://www.highperformanceformat.com/1f368fdf67bf1944d873877b1354fd14/invoke.js"></script>
+    </div>
+
+    <script>
+        const appLink = 'https://daily-y-app.github.io/Apk-download';
+        const shareTitle = 'DailyWage APK';
+        const shareText = 'DailyWage APK ကို ဒီလင့်ကနေ Download လုပ်ပါ။\n' + appLink;
+
+        async function copyText(text) {
+            if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(text);
+                return;
+            }
+            const helper = document.createElement('textarea');
+            helper.value = text;
+            helper.style.position = 'fixed';
+            helper.style.opacity = '0';
+            document.body.appendChild(helper);
+            helper.focus();
+            helper.select();
+            document.execCommand('copy');
+            helper.remove();
+        }
+
+        async function copyLink() {
+            try {
+                await copyText(appLink);
+                showNotice('✅ Link copied ပါပြီ။ သူငယ်ချင်းထံ Paste လုပ်ပြီး ပို့နိုင်ပါပြီ။');
+            } catch (error) {
+                showNotice('Link copy မအောင်မြင်ပါ။ Link ကိုဖိထားပြီး Copy လုပ်ပါ။');
+            }
+        }
+
+        async function shareLink() {
+            if (navigator.share) {
+                try {
+                    await navigator.share({ title: shareTitle, text: shareText, url: appLink });
+                } catch (error) {
+                    if (error.name !== 'AbortError') showNotice('Share မအောင်မြင်ပါ။ ထပ်စမ်းကြည့်ပါ။');
+                }
+                return;
+            }
+            await copyLink();
+        }
+
+        function showNotice(message) {
+            const notice = document.getElementById('notice');
+            notice.textContent = message;
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2800);
+        }
+    </script>
+</body>
+</html>
