@@ -240,7 +240,7 @@
     <script>
         const appLink = 'https://daily-y-app.github.io/Apk-download';
         const shareTitle = 'DailyWage APK';
-        const shareText = 'DailyWage APK ကို ဒီလင့်ကနေ Download လုပ်ပါ။\n' + appLink;
+        const shareText = '📩သင့်ငွေကြေးများကို အခမဲ့ဆင်ပြေစွာအသုံးပြုနိုင်သော Dailywage appကို ဒီဝက်ဆိုက်ကနေအခမဲ့ဒေါင်းလုဒ်လိုက်ပါ။💵\n' + appLink;
 
         async function copyText(text) {
             if (navigator.clipboard && window.isSecureContext) {
@@ -270,7 +270,7 @@
         async function shareLink() {
             if (navigator.share) {
                 try {
-                    await navigator.share({ title: shareTitle, text: shareText, url: appLink });
+                    await navigator.share({ title: shareTitle, text: shareText });
                 } catch (error) {
                     if (error.name !== 'AbortError') showNotice('Share မအောင်မြင်ပါ။ ထပ်စမ်းကြည့်ပါ။');
                 }
