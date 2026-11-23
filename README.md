@@ -1,0 +1,25 @@
+# DailyWage Share
+
+DailyWage app ကို သူငယ်ချင်းများထံ မျှဝေရန်နှင့် Referral reward campaign ကို သီးသန့်လုပ်ဆောင်ရန် အသုံးပြုသော single-page repository ဖြစ်သည်။ DailyWage Home app ၏ အမြဲတမ်း Referral bottom tab ကို ဖယ်ရှားပြီး ဤ Share page သို့သာ link ချိတ်ထားသည်။
+
+## အသုံးပြုရန် URL
+
+- ပိုင်ရှင်၏ Share page: `https://daily-y-app.github.io/Dailywage-Share/?code=PROFILECODE`
+- Referral landing link: `https://daily-y-app.github.io/Dailywage-Share/?ref=PROFILECODE`
+- Share page မှ APK URL တွင်လည်း `?ref=PROFILECODE` ကို ဆက်လက်ထည့်ပေးသည်။
+
+Share message တွင် `ဖိတ်ခေါ်လိုက်ရုံနဲ့ ၂၀ဘတ်ရယူပါ`, APK download link, RC, လက်ကျန်နှင့် Referral Link ပါဝင်သည်။ Campaign တစ်ကြိမ်လျှင် ၂၀฿ ဖြစ်ပြီး referrer တစ်ဦးအတွက် အများဆုံး ၁၀၀฿ ဖြစ်သည်။ Reward ကို Admin စိစစ်ပြီး `referralBalances/{PROFILECODE}.availableBalance` ထဲသို့ ထည့်ပေးပြီးမှ User က ငွေထုတ်တောင်းနိုင်သည်။
+
+## Firestore collections
+
+- `shareReferrals/{deviceId}` — Share landing page ဝင်ရောက်မှု၊ referrer code၊ first/last seen၊ download time နှင့် status
+- `shareReferralDevices/{deviceId}` — Device တစ်ခုကို Referral Code တစ်ခုတည်းနှင့်သာ ချိတ်ထားရန် unique registry
+- `referralBalances/{profileCode}` — Admin အတည်ပြုပြီးရရှိထားသော လက်ကျန်ဆုငွေ
+- `referralWithdrawals/{withdrawalId}` — ဖုန်းနံပါတ်၊ Email၊ amount ပါသော Pending withdrawal request
+- `adminNotifications/{withdrawalId}` — Admin Panel အတွက် `Unread` withdrawal notification
+
+Share page သည် self-referral နှင့် device တစ်ခုကို Referral Code မတူဘဲ ထပ်အသုံးပြုခြင်းကို client-side transaction ဖြင့် တားဆီးထားသည်။ Client fingerprint သည် best-effort ဖြစ်သောကြောင့် အပြည့်အဝ anti-fraud အတွက် Firebase Auth, App Check နှင့် server-side validation ကို production တွင် ထည့်သွင်းသင့်သည်။
+
+## Security
+
+Admin Panel repository ရှိ `firestore.rules` တွင် Share collections အတွက် rules ထည့်ထားသည်။ လက်ရှိ rules သည် Firebase Authentication နှင့် `admin == true` custom claim ကို အခြေခံထားသော production နမူနာဖြစ်သည်။ Static Admin PIN တစ်ခုတည်းကို Firestore security အဖြစ် မသုံးသင့်ပါ။

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -100,6 +101,18 @@
         .copy-btn { width: auto; padding: 9px 12px; background: #EBC20E; color: #1B2358; font-size: 12px; }
         .friend-btn { color: white; background: linear-gradient(135deg, #1B2358 0%, #B81D28 100%); }
         .admin-contact { margin-top: 16px; color: white; background: linear-gradient(135deg, #1B2358 0%, #B81D28 100%); }
+        .campaign-box { margin: 14px 0; padding: 14px; border-radius: 13px; background: #f0fdf4; border: 1px solid #86efac; color: #14532d; text-align: center; }
+        .campaign-box small { display: block; font-size: 11px; margin-bottom: 5px; }
+        .campaign-box strong { display: block; font-size: 25px; }
+        .campaign-status { min-height: 20px; margin-top: 10px; color: #666; font-size: 12px; line-height: 1.5; text-align: center; }
+        .withdraw-btn { margin-top: 10px; color: #fff; background: #047857; }
+        .modal { display:none; position:fixed; inset:0; z-index:10000; align-items:center; justify-content:center; padding:18px; background:rgba(0,0,0,.65); }
+        .modal.show { display:flex; }
+        .modal-card { width:min(420px,100%); padding:20px; border-radius:17px; background:#fffdf0; border:2px solid #f2ce3e; box-shadow:0 15px 35px rgba(0,0,0,.25); }
+        .modal-card h3 { color:#1B2358; text-align:center; margin-bottom:12px; }
+        .modal-card label { display:block; margin:11px 0 5px; color:#666; font-size:12px; font-weight:700; }
+        .modal-card input { width:100%; padding:12px; border:1px solid #ddd; border-radius:9px; font-size:15px; }
+        .modal-close { margin-top:9px; background:#64748b; }
 
         .ad-banner-footer {
             position: fixed;
@@ -195,7 +208,7 @@
             <p>သူငယ်ချင်းများကို App Link မျှဝေပါ</p>
         </header>
 
-        <a class="banner-ad" href="https://daily-y-app.github.io/Apk-download" target="_blank" rel="noopener noreferrer">
+        <a id="downloadBanner" class="banner-ad" href="https://daily-y-app.github.io/Apk-download" target="_blank" rel="noopener noreferrer" onclick="recordDownloadEvent()">
             <div class="banner-ad-copy">
                 <span class="banner-ad-label">DAILYWAGE APP</span>
                 <h3>နေ့စဉ်ဝင်ငွေအတွက် စတင်လိုက်ပါ</h3>
@@ -206,7 +219,9 @@
 
         <section class="card">
             <h2><i class="fas fa-user-plus"></i>သူငယ်ချင်းကိုမျှဝေပါ</h2>
-            <p class="intro">DailyWage APK ကို သူငယ်ချင်းတွေဆီ အလွယ်တကူ ပို့လိုက်ပါ။</p>
+            <p class="intro">ဖိတ်ခေါ်လိုက်ရုံနဲ့ ၂၀ဘတ်ရယူပါ။ သူငယ်ချင်းက ဒီ Link ကနေ ဝင်ပြီး App ကို အသုံးပြုရင် Admin စိစစ်ပြီး ဆုငွေထည့်ပေးပါမယ်။</p>
+
+            <div class="campaign-box"><small>လက်ရှိ ဆုငွေလက်ကျန်</small><strong id="balanceAmount">0฿</strong><small id="balanceHint">Share လုပ်ပြီး သူငယ်ချင်းတွေကို ဖိတ်ခေါ်ပါ</small></div>
 
             <div class="link-box">
                 <input id="appLink" type="text" readonly value="https://daily-y-app.github.io/Apk-download" aria-label="DailyWage APK link">
@@ -216,6 +231,8 @@
             <button class="friend-btn" onclick="shareLink()">
                 <i class="fas fa-user-plus"></i> သူငယ်ချင်းကိုမျှဝေပါ
             </button>
+            <button class="withdraw-btn" onclick="openWithdrawalModal()"><i class="fas fa-money-bill-transfer"></i> လက်ကျန်ငွေထုတ်ရန်</button>
+            <div id="campaignStatus" class="campaign-status"></div>
 
             <a class="admin-contact" href="https://www.facebook.com/people/Pwint-Phyu/pfbid0EY52WAUuMgCMJWcX3sKGxBzmoMD8D7c7xixUKgX95PsRaC93je6QpVH2SUXiT8bxl/" target="_blank" rel="noopener noreferrer">
                 <i class="fab fa-facebook"></i> Admin ကိုဆက်သွယ်ရန်
@@ -224,6 +241,20 @@
     </main>
 
     <div id="notice" class="notice" role="status"></div>
+
+    <div id="withdrawalModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="withdrawTitle">
+        <div class="modal-card">
+            <h3 id="withdrawTitle">💸 ဆုငွေထုတ်ယူရန်</h3>
+            <label for="withdrawPhone">ဖုန်းနံပါတ်</label>
+            <input id="withdrawPhone" type="tel" inputmode="tel" placeholder="08xxxxxxxx">
+            <label for="withdrawEmail">Email</label>
+            <input id="withdrawEmail" type="email" placeholder="you@example.com">
+            <label for="withdrawAmount">ထုတ်ယူမည့်ပမာဏ (အနည်းဆုံး ၂၀฿)</label>
+            <input id="withdrawAmount" type="number" min="20" step="10" placeholder="20">
+            <button class="withdraw-btn" onclick="submitWithdrawal()">တောင်းဆိုမည်</button>
+            <button class="modal-close" onclick="closeWithdrawalModal()">မလုပ်တော့ပါ</button>
+        </div>
+    </div>
 
     <div class="ad-banner-footer" aria-label="Advertisement">
         <!-- First Ad -->
@@ -252,8 +283,13 @@
             appId: "1:428949391732:web:6aa0a31a4f4ba33765c421"
         };
         if (!firebase.apps.length) firebase.initializeApp(shareFirebaseConfig);
+        const shareDatabase = firebase.database();
+        const shareFirestore = firebase.firestore();
         const shareProfile = JSON.parse(localStorage.getItem('f_prof') || '{}');
-        const shareCode = new URLSearchParams(location.search).get('code') || shareProfile.code || 'EMP001';
+        const shareParams = new URLSearchParams(location.search);
+        const incomingRefCode = (shareParams.get('ref') || '').trim().toUpperCase();
+        const campaignOwnerCode = (shareParams.get('code') || shareProfile.code || '').trim().toUpperCase();
+        const shareCode = (shareParams.get('code') || incomingRefCode || shareProfile.code || 'EMP001').trim().toUpperCase();
         function renderShareAvatar(profile) {
             const el = document.getElementById('shareAvatar');
             if (!el) return;
@@ -262,13 +298,79 @@
                 ? `<img src="${profile.avatarUrl}" alt="Profile photo">`
                 : avatar;
         }
-        firebase.database().ref('users/' + shareCode + '/profile').on('value', snapshot => {
+        shareDatabase.ref('users/' + shareCode + '/profile').on('value', snapshot => {
             if (snapshot.exists()) renderShareAvatar(snapshot.val());
         });
 
         const appLink = 'https://daily-y-app.github.io/Apk-download';
         const shareTitle = 'DailyWage APK';
-        const shareText = '📩သင့်ငွေကြေးများကို အခမဲ့ဆင်ပြေစွာအသုံးပြုနိုင်သော Dailywage appကို ဒီဝက်ဆိုက်ကနေအခမဲ့ဒေါင်းလုဒ်လိုက်ပါ။💵\n' + appLink;
+        let shareDeviceId = '';
+
+        function personalShareLink() {
+            const url = new URL(location.href);
+            url.search = '';
+            if (campaignOwnerCode) url.searchParams.set('ref', campaignOwnerCode);
+            return url.toString();
+        }
+
+        function appDownloadLink() {
+            return campaignOwnerCode ? `${appLink}?ref=${encodeURIComponent(campaignOwnerCode)}` : appLink;
+        }
+
+        function setCampaignStatus(message) {
+            const element = document.getElementById('campaignStatus');
+            if (element) element.textContent = message;
+        }
+
+        async function hashShareSignals(value) {
+            const bytes = new TextEncoder().encode(value);
+            const digest = await crypto.subtle.digest('SHA-256', bytes);
+            return Array.from(new Uint8Array(digest)).map(byte => byte.toString(16).padStart(2, '0')).join('');
+        }
+
+        async function getShareDeviceId() {
+            let saved = '';
+            try { saved = localStorage.getItem('dailywage_share_device_id') || ''; } catch (error) {}
+            if (saved.startsWith('sharedev_')) return saved;
+            const cookie = document.cookie.split('; ').find(row => row.startsWith('dailywage_share_device_id='));
+            if (cookie) saved = decodeURIComponent(cookie.split('=').slice(1).join('='));
+            if (!saved.startsWith('sharedev_')) {
+                const signals = [screen.width, screen.height, navigator.userAgent, navigator.language, Intl.DateTimeFormat().resolvedOptions().timeZone, navigator.hardwareConcurrency || ''].join('|');
+                saved = `sharedev_${(await hashShareSignals(signals)).slice(0, 40)}`;
+            }
+            try { localStorage.setItem('dailywage_share_device_id', saved); } catch (error) {}
+            document.cookie = `dailywage_share_device_id=${encodeURIComponent(saved)}; Max-Age=31536000; Path=/; SameSite=Lax`;
+            return saved;
+        }
+
+        async function recordReferralLanding() {
+            if (!incomingRefCode) return;
+            shareDeviceId = await getShareDeviceId();
+            if (campaignOwnerCode && incomingRefCode === campaignOwnerCode) {
+                setCampaignStatus('ကိုယ့် Referral Link ကို ကိုယ်တိုင်အသုံးပြု၍ မရပါ။');
+                return;
+            }
+            try {
+                const eventRef = shareFirestore.collection('shareReferrals').doc(shareDeviceId);
+                const deviceRef = shareFirestore.collection('shareReferralDevices').doc(shareDeviceId);
+                await shareFirestore.runTransaction(async transaction => {
+                    const existing = await transaction.get(eventRef);
+                    const device = await transaction.get(deviceRef);
+                    const old = existing.exists ? existing.data() || {} : {};
+                    const oldDevice = device.exists ? device.data() || {} : {};
+                    if ((oldDevice.referrerCode && oldDevice.referrerCode !== incomingRefCode) || (old.referrerCode && old.referrerCode !== incomingRefCode)) throw new Error('SHARE_DEVICE_ALREADY_REFERRED');
+                    const payload = { referrerCode: incomingRefCode, referredDeviceId: shareDeviceId, status: 'visited', firstSeenAt: old.firstSeenAt || new Date().toISOString(), lastSeenAt: new Date().toISOString(), userAgent: navigator.userAgent || '', language: navigator.language || '' };
+                    transaction.set(eventRef, payload, { merge: true });
+                    transaction.set(deviceRef, { deviceId: shareDeviceId, referrerCode: incomingRefCode, firstSeenAt: oldDevice.firstSeenAt || new Date().toISOString() }, { merge: true });
+                });
+                setCampaignStatus(`Referral Code ${incomingRefCode} ဖြင့် ဝင်လာမှုကို မှတ်တမ်းတင်ပြီးပါပြီ။`);
+            } catch (error) { setCampaignStatus(error.message === 'SHARE_DEVICE_ALREADY_REFERRED' ? 'ဒီ device မှာ အခြား Referral Code အသုံးပြုပြီးသားဖြစ်ပါတယ်။' : 'Referral activity မှတ်တမ်းတင်မရသေးပါ။'); }
+        }
+
+        async function recordDownloadEvent() {
+            if (!shareDeviceId || !incomingRefCode) return;
+            try { await shareFirestore.collection('shareReferrals').doc(shareDeviceId).set({ downloadedAt: new Date().toISOString(), status: 'downloaded' }, { merge: true }); } catch (error) { console.warn('Share download event failed:', error); }
+        }
 
         async function copyText(text) {
             if (navigator.clipboard && window.isSecureContext) {
@@ -288,7 +390,7 @@
 
         async function copyLink() {
             try {
-                await copyText(appLink);
+                await copyText(appDownloadLink());
                 showNotice('✅ Link copied ပါပြီ။ သူငယ်ချင်းထံ Paste လုပ်ပြီး ပို့နိုင်ပါပြီ။');
             } catch (error) {
                 showNotice('Link copy မအောင်မြင်ပါ။ Link ကိုဖိထားပြီး Copy လုပ်ပါ။');
@@ -296,16 +398,71 @@
         }
 
         async function shareLink() {
+            const downloadUrl = appDownloadLink();
+            const code = campaignOwnerCode || 'မသတ်မှတ်ရသေးပါ';
+            const text = `ဖိတ်ခေါ်လိုက်ရုံနဲ့ ၂၀ဘတ်ရယူပါ\n(Daily Wage App ကို ဒီမှာ download လုပ်ပါ။ ${downloadUrl})\nRC: ${code}\nReferral Link: ${personalShareLink()}`;
+            await recordDownloadEvent();
             if (navigator.share) {
                 try {
-                    await navigator.share({ title: shareTitle, text: shareText });
+                    await navigator.share({ title: shareTitle, text });
                 } catch (error) {
                     if (error.name !== 'AbortError') showNotice('Share မအောင်မြင်ပါ။ ထပ်စမ်းကြည့်ပါ။');
                 }
                 return;
             }
-            await copyLink();
+            try { await copyText(text); showNotice('✅ Referral share စာသားကို Copy လုပ်ပြီးပါပြီ။'); } catch (error) { showNotice('Share မအောင်မြင်ပါ။'); }
         }
+
+        async function loadCampaignBalance() {
+            if (!campaignOwnerCode) return;
+            try {
+                const snapshot = await shareFirestore.collection('referralBalances').doc(campaignOwnerCode).get();
+                const balance = Number(snapshot.data()?.availableBalance || 0);
+                document.getElementById('balanceAmount').textContent = `${balance}฿`;
+                document.getElementById('balanceHint').textContent = `RC: ${campaignOwnerCode} · Admin စိစစ်ပြီး ရရှိထားသောလက်ကျန်`;
+            } catch (error) { setCampaignStatus('လက်ကျန်ကို ယခုခဏ ဖတ်မရသေးပါ။'); }
+        }
+
+        function openWithdrawalModal() {
+            document.getElementById('withdrawAmount').value = document.getElementById('withdrawAmount').value || 20;
+            document.getElementById('withdrawPhone').value = document.getElementById('withdrawPhone').value || shareProfile.phone || '';
+            document.getElementById('withdrawEmail').value = document.getElementById('withdrawEmail').value || shareProfile.email || '';
+            document.getElementById('withdrawalModal').classList.add('show');
+        }
+
+        function closeWithdrawalModal() { document.getElementById('withdrawalModal').classList.remove('show'); }
+
+        async function submitWithdrawal() {
+            const phone = String(document.getElementById('withdrawPhone').value || '').replace(/[^0-9]/g, '');
+            const email = String(document.getElementById('withdrawEmail').value || '').trim().toLowerCase();
+            const amount = Number(document.getElementById('withdrawAmount').value || 0);
+            if (!campaignOwnerCode || phone.length < 8 || !email.includes('@') || amount < 20) return showNotice('RC, ဖုန်းနံပါတ်၊ Email နှင့် အနည်းဆုံး ၂၀฿ ပမာဏ လိုအပ်ပါသည်။');
+            try {
+                const balanceRef = shareFirestore.collection('referralBalances').doc(campaignOwnerCode);
+                const withdrawalRef = shareFirestore.collection('referralWithdrawals').doc(`${campaignOwnerCode}_${Date.now()}`);
+                await shareFirestore.runTransaction(async transaction => {
+                    const balanceSnapshot = await transaction.get(balanceRef);
+                    const balance = balanceSnapshot.exists ? balanceSnapshot.data() || {} : {};
+                    if (Number(balance.availableBalance || 0) < amount) throw new Error('INSUFFICIENT_BALANCE');
+                    const now = new Date().toISOString();
+                    transaction.set(withdrawalRef, { referrerCode: campaignOwnerCode, referrerName: shareProfile.name || 'User', phoneNumber: phone, email, amount, status: 'Pending', source: 'share-repo', createdAt: now });
+                    transaction.set(shareFirestore.collection('adminNotifications').doc(withdrawalRef.id), { type: 'withdrawal_request', withdrawalId: withdrawalRef.id, referrerCode: campaignOwnerCode, referrerName: shareProfile.name || 'User', phoneNumber: phone, email, amount, status: 'Unread', source: 'share-repo', createdAt: now });
+                });
+                closeWithdrawalModal();
+                showNotice('✅ Withdrawal Request ကို Admin Panel သို့ ပို့ပြီးပါပြီ။');
+            } catch (error) { showNotice(error.message === 'INSUFFICIENT_BALANCE' ? 'လက်ကျန်ငွေ မလုံလောက်ပါ။' : 'Withdrawal Request ပို့မရသေးပါ။'); }
+        }
+
+        async function initializeCampaign() {
+            const link = document.getElementById('appLink');
+            if (link) link.value = appDownloadLink();
+            const banner = document.getElementById('downloadBanner');
+            if (banner) banner.href = appDownloadLink();
+            await recordReferralLanding();
+            await loadCampaignBalance();
+        }
+
+        initializeCampaign();
 
         function showNotice(message) {
             const notice = document.getElementById('notice');
