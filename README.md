@@ -31,6 +31,7 @@ Share page သည် self-referral နှင့် device တစ်ခုကိ�
 Request ကို Admin Panel က `withdraw_requests` ကို Firestore `onSnapshot()` ဖြင့် real-time စောင့်ကြည့်ပြီး `approved_paid` သို့မဟုတ် `rejected` ပြောင်းနိုင်သည်။ Approved/Paid လုပ်ချိန်တွင် Admin transaction က `referralBalances.availableBalance` မှ amount ကိုနုတ်ပြီး payout audit record သိမ်းသည်။
 
 Payout profile form ကို balance ၀ ဖြစ်နေသေးချိန်နှင့် Share Count target မပြည့်သေးချိန်တွင်လည်း ဖြည့်ပြီး ကြိုသိမ်းနိုင်သည်။ Local device storage နှင့် `referralPayoutProfiles` နှစ်ခုလုံးတွင် သိမ်းပြီး နောက်ပိုင်း withdrawal form ထဲသို့ အလိုအလျောက် ဖြည့်ပေးသည်။
+Payout profile ကို user က ပြင်ဆင်/သိမ်းတိုင်း `verificationStatus: pending` ဖြစ်ပြီး Admin Panel မှ Verify မလုပ်မချင်း ငွေပေးချေမှု မပြုလုပ်ပါ။
 
 ## Security
 

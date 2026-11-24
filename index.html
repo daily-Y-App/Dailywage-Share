@@ -474,6 +474,7 @@
                 payoutMethod: String(document.getElementById('payoutMethod').value || '').trim(),
                 payoutAccount: String(document.getElementById('payoutAccount').value || '').trim(),
                 profileCode: campaignOwnerCode,
+                verificationStatus: 'pending',
                 updatedAtIso: new Date().toISOString()
             };
             if (!profile.userName || profile.phoneNumber.length < 8 || !profile.payoutMethod || !profile.payoutAccount) {
