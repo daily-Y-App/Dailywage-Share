@@ -224,8 +224,8 @@
             <div class="campaign-box"><small>လက်ရှိ ဆုငွေလက်ကျန်</small><strong id="balanceAmount">0฿</strong><small id="balanceHint">Share လုပ်ပြီး သူငယ်ချင်းတွေကို ဖိတ်ခေါ်ပါ</small></div>
 
             <div class="link-box">
-                <input id="appLink" type="text" readonly value="https://daily-y-app.github.io/Apk-download" aria-label="DailyWage APK link">
-                <button class="copy-btn" onclick="copyLink()"><i class="fas fa-copy"></i> Copy</button>
+                <input id="appLink" type="text" readonly value="https://daily-y-app.github.io/Dailywage-Share/" aria-label="DailyWage referral link">
+                <button class="copy-btn" onclick="copyLink()"><i class="fas fa-copy"></i> Referral Link Copy</button>
             </div>
 
             <button class="friend-btn" onclick="shareLink()">
@@ -390,17 +390,17 @@
 
         async function copyLink() {
             try {
-                await copyText(appDownloadLink());
-                showNotice('✅ Link copied ပါပြီ။ သူငယ်ချင်းထံ Paste လုပ်ပြီး ပို့နိုင်ပါပြီ။');
+                await copyText(personalShareLink());
+                showNotice('✅ Referral Link တစ်ခုတည်းကို Copy လုပ်ပြီးပါပြီ။');
             } catch (error) {
                 showNotice('Link copy မအောင်မြင်ပါ။ Link ကိုဖိထားပြီး Copy လုပ်ပါ။');
             }
         }
 
         async function shareLink() {
-            const downloadUrl = appDownloadLink();
             const code = campaignOwnerCode || 'မသတ်မှတ်ရသေးပါ';
-            const text = `ဖိတ်ခေါ်လိုက်ရုံနဲ့ ၂၀ဘတ်ရယူပါ\n(Daily Wage App ကို ဒီမှာ download လုပ်ပါ။ ${downloadUrl})\nRC: ${code}\nReferral Link: ${personalShareLink()}`;
+            const referralUrl = personalShareLink();
+            const text = `ဖိတ်ခေါ်လိုက်ရုံနဲ့ ၂၀ဘတ်ရယူပါ\n(Daily Wage App ကို Download လုပ်ရန် အောက်ပါ Referral Link ကိုဖွင့်ပြီး Download ခလုတ်ကိုနှိပ်ပါ)\nRC: ${code}\nReferral Link: ${referralUrl}`;
             await recordDownloadEvent();
             if (navigator.share) {
                 try {
@@ -455,7 +455,7 @@
 
         async function initializeCampaign() {
             const link = document.getElementById('appLink');
-            if (link) link.value = appDownloadLink();
+            if (link) link.value = personalShareLink();
             const banner = document.getElementById('downloadBanner');
             if (banner) banner.href = appDownloadLink();
             await recordReferralLanding();
