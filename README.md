@@ -20,6 +20,7 @@ Share message တွင် `ဖိတ်ခေါ်လိုက်ရုံန�
 - `withdraw_requests/{requestId}` — Share Count ပြည့်ပြီးမှ တင်နိုင်သော request (`userId`, `profileCode`, `userName`, `phoneNumber`, `email`, `payoutAccount`, `shareCountAtRequest`, `referredSummary`, `deviceId`, `amount`, `status: pending`, `createdAt`)
 - `withdraw_request_phones/{phoneKey}` — Phone number တစ်ခုတည်းဖြင့် request ထပ်မတင်နိုင်ရန် immutable reservation
 - `withdraw_request_devices/{deviceId}` — Device တစ်ခုတည်းဖြင့် request ထပ်မတင်နိုင်ရန် immutable reservation
+- `referralPayoutProfiles/{profileCode}` — လက်ကျန်/Share Count မပြည့်ခင် ကြိုသိမ်းထားနိုင်သော အမည်၊ ဖုန်း၊ `TrueMoney`/`WavePay`/`KPay` နှင့် account အချက်အလက်
 
 Share page သည် self-referral နှင့် device တစ်ခုကို Referral Code မတူဘဲ ထပ်အသုံးပြုခြင်းကို client-side transaction ဖြင့် တားဆီးထားသည်။ Client fingerprint သည် best-effort ဖြစ်သောကြောင့် အပြည့်အဝ anti-fraud အတွက် Firebase Auth, App Check နှင့် server-side validation ကို production တွင် ထည့်သွင်းသင့်သည်။
 
@@ -28,6 +29,8 @@ Share page သည် self-referral နှင့် device တစ်ခုကိ�
 လက်ရှိ valid count သည် raw share-button tap မဟုတ်ပါ။ Admin က `referralClaims` ထဲမှ အမှန်တကယ် စစ်ဆေးပြီး `Paid` လုပ်သော claim တစ်ခုစီအတွက် `referralBalances/{profileCode}.shareCount` ကို ၁ တိုးပေးသည်။ Share page ၏ `minShareCount = 5` target ပြည့်မှသာ “ဆု/ငွေထုတ် လျှောက်လွှာတင်မည်” ခလုတ်ကို ဖွင့်သည်။ မပြည့်သေးပါက လိုအပ်သည့် share အရေအတွက်ကို ပြထားသည်။
 
 Request ကို Admin Panel က `withdraw_requests` ကို Firestore `onSnapshot()` ဖြင့် real-time စောင့်ကြည့်ပြီး `approved_paid` သို့မဟုတ် `rejected` ပြောင်းနိုင်သည်။ Approved/Paid လုပ်ချိန်တွင် Admin transaction က `referralBalances.availableBalance` မှ amount ကိုနုတ်ပြီး payout audit record သိမ်းသည်။
+
+Payout profile form ကို balance ၀ ဖြစ်နေသေးချိန်နှင့် Share Count target မပြည့်သေးချိန်တွင်လည်း ဖြည့်ပြီး ကြိုသိမ်းနိုင်သည်။ Local device storage နှင့် `referralPayoutProfiles` နှစ်ခုလုံးတွင် သိမ်းပြီး နောက်ပိုင်း withdrawal form ထဲသို့ အလိုအလျောက် ဖြည့်ပေးသည်။
 
 ## Security
 

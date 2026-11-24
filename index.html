@@ -108,6 +108,12 @@
         .eligibility-line { display: flex; justify-content: space-between; gap: 12px; margin: 5px 0; font-size: 13px; }
         .eligibility-line strong { font-size: 16px; }
         .eligibility-status { margin-top: 8px; font-size: 12px; line-height: 1.5; font-weight: 700; }
+        .payout-profile-box { margin: 12px 0; padding: 14px; border-radius: 13px; background: #fff7ed; border: 1px solid #fdba74; color: #7c2d12; }
+        .payout-profile-box h3 { margin-bottom: 6px; font-size: 15px; }
+        .payout-profile-box p { margin-bottom: 9px; font-size: 11px; line-height: 1.5; }
+        .payout-profile-box label { display: block; margin: 7px 0 4px; font-size: 11px; font-weight: 700; }
+        .payout-profile-box input, .payout-profile-box select { width: 100%; padding: 10px; border: 1px solid #fed7aa; border-radius: 8px; background: white; font-size: 14px; }
+        .save-payout-btn { margin-top: 10px; color: white; background: #c2410c; }
         .campaign-status { min-height: 20px; margin-top: 10px; color: #666; font-size: 12px; line-height: 1.5; text-align: center; }
         .withdraw-btn { margin-top: 10px; color: #fff; background: #047857; }
         .withdraw-btn:disabled { opacity: .55; cursor: not-allowed; filter: grayscale(.35); }
@@ -232,6 +238,25 @@
                 <div class="eligibility-line"><span>အတည်ပြုထားသော Share/Referral</span><strong id="validShareCount">0</strong></div>
                 <div class="eligibility-line"><span>လိုအပ်သော Target</span><strong id="shareTargetCount">5</strong></div>
                 <div id="eligibilityStatus" class="eligibility-status">လျှောက်လွှာတင်ရန် Share ၅ ခု လိုအပ်ပါသည်။</div>
+            </div>
+
+            <div class="payout-profile-box">
+                <h3>💳 ငွေလက်ခံမည့်အချက်အလက် ကြိုသိမ်းရန်</h3>
+                <p>လက်ကျန်ငွေ မရသေးခင်နှင့် Share Count မပြည့်သေးခင်လည်း အောက်ပါအချက်အလက်များကို ကြိုထည့်သိမ်းနိုင်ပါသည်။</p>
+                <label for="payoutName">အမည်</label>
+                <input id="payoutName" type="text" placeholder="အမည်">
+                <label for="payoutPhone">ဖုန်းနံပါတ်</label>
+                <input id="payoutPhone" type="tel" inputmode="tel" placeholder="08xxxxxxxx">
+                <label for="payoutMethod">ငွေလက်ခံမည့်နည်းလမ်း</label>
+                <select id="payoutMethod">
+                    <option value="">ရွေးချယ်ပါ</option>
+                    <option value="TrueMoney">TrueMoney</option>
+                    <option value="WavePay">WavePay</option>
+                    <option value="KPay">KPay</option>
+                </select>
+                <label for="payoutAccount">Account / ဖုန်းနံပါတ်</label>
+                <input id="payoutAccount" type="text" placeholder="Account သို့မဟုတ် ဖုန်းနံပါတ်">
+                <button class="save-payout-btn" type="button" onclick="savePayoutProfile()"><i class="fas fa-save"></i> အချက်အလက် သိမ်းမည်</button>
             </div>
 
             <div class="link-box">
@@ -417,6 +442,50 @@
             }
         }
 
+        function payoutProfileStorageKey() { return `dailywage_payout_profile_${campaignOwnerCode || 'guest'}`; }
+
+        function fillPayoutProfile(profile) {
+            const data = profile || {};
+            document.getElementById('payoutName').value = data.userName || data.name || shareProfile.name || '';
+            document.getElementById('payoutPhone').value = data.phoneNumber || data.phone || shareProfile.phone || '';
+            document.getElementById('payoutMethod').value = data.payoutMethod || '';
+            document.getElementById('payoutAccount').value = data.payoutAccount || '';
+        }
+
+        async function loadPayoutProfile() {
+            let saved = {};
+            try { saved = JSON.parse(localStorage.getItem(payoutProfileStorageKey()) || '{}'); } catch (error) {}
+            fillPayoutProfile(saved);
+            if (!campaignOwnerCode) return;
+            try {
+                const snapshot = await shareFirestore.collection('referralPayoutProfiles').doc(campaignOwnerCode).get();
+                if (snapshot.exists) {
+                    saved = snapshot.data() || {};
+                    try { localStorage.setItem(payoutProfileStorageKey(), JSON.stringify(saved)); } catch (error) {}
+                    fillPayoutProfile(saved);
+                }
+            } catch (error) { console.warn('Payout profile cloud read failed; local profile remains available:', error); }
+        }
+
+        async function savePayoutProfile() {
+            const profile = {
+                userName: String(document.getElementById('payoutName').value || '').trim(),
+                phoneNumber: String(document.getElementById('payoutPhone').value || '').replace(/[^0-9]/g, ''),
+                payoutMethod: String(document.getElementById('payoutMethod').value || '').trim(),
+                payoutAccount: String(document.getElementById('payoutAccount').value || '').trim(),
+                profileCode: campaignOwnerCode,
+                updatedAtIso: new Date().toISOString()
+            };
+            if (!profile.userName || profile.phoneNumber.length < 8 || !profile.payoutMethod || !profile.payoutAccount) {
+                return showNotice('အမည်၊ ဖုန်း၊ TrueMoney/WavePay/KPay နှင့် Account အချက်အလက်များ ဖြည့်ပါ။');
+            }
+            try { localStorage.setItem(payoutProfileStorageKey(), JSON.stringify(profile)); } catch (error) {}
+            try {
+                await shareFirestore.collection('referralPayoutProfiles').doc(campaignOwnerCode).set(profile, { merge: true });
+                showNotice('✅ ငွေလက်ခံမည့်အချက်အလက်ကို ကြိုသိမ်းပြီးပါပြီ။');
+            } catch (error) { showNotice('✅ ဒီဖုန်းထဲတွင် သိမ်းပြီးပါပြီ။ Cloud sync မရသေးပါ။'); }
+        }
+
         async function shareLink() {
             const code = campaignOwnerCode || 'မသတ်မှတ်ရသေးပါ';
             const referralUrl = personalShareLink();
@@ -458,10 +527,11 @@
             if (validShareCount < minShareCount) {
                 return showNotice(`Share ${Math.max(0, minShareCount - validShareCount)} ခု ထပ်လိုအပ်ပါသည်။`);
             }
-            document.getElementById('withdrawName').value = document.getElementById('withdrawName').value || shareProfile.name || '';
+            document.getElementById('withdrawName').value = document.getElementById('withdrawName').value || document.getElementById('payoutName').value || shareProfile.name || '';
             document.getElementById('withdrawAmount').value = document.getElementById('withdrawAmount').value || 20;
-            document.getElementById('withdrawPhone').value = document.getElementById('withdrawPhone').value || shareProfile.phone || '';
+            document.getElementById('withdrawPhone').value = document.getElementById('withdrawPhone').value || document.getElementById('payoutPhone').value || shareProfile.phone || '';
             document.getElementById('withdrawEmail').value = document.getElementById('withdrawEmail').value || shareProfile.email || '';
+            document.getElementById('withdrawPayout').value = document.getElementById('withdrawPayout').value || `${document.getElementById('payoutMethod').value || ''} ${document.getElementById('payoutAccount').value || ''}`.trim();
             document.getElementById('withdrawalModal').classList.add('show');
         }
 
@@ -480,10 +550,11 @@
         async function submitWithdrawal() {
             if (validShareCount < minShareCount) return showNotice(`Share ${Math.max(0, minShareCount - validShareCount)} ခု ထပ်လိုအပ်ပါသည်။`);
             if (!shareDeviceId) shareDeviceId = await getShareDeviceId();
-            const userName = String(document.getElementById('withdrawName').value || shareProfile.name || 'User').trim();
+            const userName = String(document.getElementById('withdrawName').value || document.getElementById('payoutName').value || shareProfile.name || 'User').trim();
             const phone = String(document.getElementById('withdrawPhone').value || '').replace(/[^0-9]/g, '');
             const email = String(document.getElementById('withdrawEmail').value || '').trim().toLowerCase();
-            const payoutAccount = String(document.getElementById('withdrawPayout').value || '').trim();
+            const payoutMethod = String(document.getElementById('payoutMethod').value || '').trim();
+            const payoutAccount = String(document.getElementById('withdrawPayout').value || '').trim() || String(document.getElementById('payoutAccount').value || '').trim();
             const amount = Number(document.getElementById('withdrawAmount').value || 0);
             if (!campaignOwnerCode || phone.length < 8 || !email.includes('@') || amount < 20) return showNotice('RC, ဖုန်းနံပါတ်၊ Email နှင့် အနည်းဆုံး ၂၀฿ ပမာဏ လိုအပ်ပါသည်။');
             if (amount > availableBalance) return showNotice(`လက်ကျန် ${availableBalance}฿ ထက် မပိုသော ပမာဏကိုသာ တောင်းခံနိုင်ပါသည်။`);
@@ -504,7 +575,7 @@
                     if (deviceSnapshot.exists) throw new Error('DEVICE_ALREADY_USED');
                     if (Number(balance.availableBalance || 0) < amount) throw new Error('INSUFFICIENT_BALANCE');
                     const now = new Date().toISOString();
-                    transaction.set(requestRef, { userId: campaignOwnerCode, profileCode: campaignOwnerCode, userName, phoneNumber: phone, email, payoutAccount, shareCountAtRequest: validShareCount, referredSummary: { validShareCount, targetCount: minShareCount, remaining: Math.max(0, minShareCount - validShareCount), balanceAtRequest: Number(balance.availableBalance || 0) }, deviceId: shareDeviceId, amount, status: 'pending', source: 'share-repo', createdAt: firebase.firestore.FieldValue.serverTimestamp(), createdAtIso: now });
+                    transaction.set(requestRef, { userId: campaignOwnerCode, profileCode: campaignOwnerCode, userName, phoneNumber: phone, email, payoutMethod, payoutAccount, shareCountAtRequest: validShareCount, referredSummary: { validShareCount, targetCount: minShareCount, remaining: Math.max(0, minShareCount - validShareCount), balanceAtRequest: Number(balance.availableBalance || 0) }, deviceId: shareDeviceId, amount, status: 'pending', source: 'share-repo', createdAt: firebase.firestore.FieldValue.serverTimestamp(), createdAtIso: now });
                     transaction.set(phoneRef, { phoneKey, phoneNumber: phone, requestId: requestRef.id, userId: campaignOwnerCode, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
                     transaction.set(deviceRef, { deviceId: shareDeviceId, requestId: requestRef.id, userId: campaignOwnerCode, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
                 });
@@ -529,6 +600,7 @@
             if (link) link.value = personalShareLink();
             const banner = document.getElementById('downloadBanner');
             if (banner) banner.href = appDownloadLink();
+            await loadPayoutProfile();
             await recordReferralLanding();
             await loadCampaignBalance();
         }
