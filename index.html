@@ -104,8 +104,13 @@
         .campaign-box { margin: 14px 0; padding: 14px; border-radius: 13px; background: #f0fdf4; border: 1px solid #86efac; color: #14532d; text-align: center; }
         .campaign-box small { display: block; font-size: 11px; margin-bottom: 5px; }
         .campaign-box strong { display: block; font-size: 25px; }
+        .eligibility-box { margin: 12px 0; padding: 14px; border-radius: 13px; background: #eff6ff; border: 1px solid #93c5fd; color: #1e3a8a; }
+        .eligibility-line { display: flex; justify-content: space-between; gap: 12px; margin: 5px 0; font-size: 13px; }
+        .eligibility-line strong { font-size: 16px; }
+        .eligibility-status { margin-top: 8px; font-size: 12px; line-height: 1.5; font-weight: 700; }
         .campaign-status { min-height: 20px; margin-top: 10px; color: #666; font-size: 12px; line-height: 1.5; text-align: center; }
         .withdraw-btn { margin-top: 10px; color: #fff; background: #047857; }
+        .withdraw-btn:disabled { opacity: .55; cursor: not-allowed; filter: grayscale(.35); }
         .modal { display:none; position:fixed; inset:0; z-index:10000; align-items:center; justify-content:center; padding:18px; background:rgba(0,0,0,.65); }
         .modal.show { display:flex; }
         .modal-card { width:min(420px,100%); padding:20px; border-radius:17px; background:#fffdf0; border:2px solid #f2ce3e; box-shadow:0 15px 35px rgba(0,0,0,.25); }
@@ -223,6 +228,12 @@
 
             <div class="campaign-box"><small>လက်ရှိ ဆုငွေလက်ကျန်</small><strong id="balanceAmount">0฿</strong><small id="balanceHint">Share လုပ်ပြီး သူငယ်ချင်းတွေကို ဖိတ်ခေါ်ပါ</small></div>
 
+            <div class="eligibility-box" aria-live="polite">
+                <div class="eligibility-line"><span>အတည်ပြုထားသော Share/Referral</span><strong id="validShareCount">0</strong></div>
+                <div class="eligibility-line"><span>လိုအပ်သော Target</span><strong id="shareTargetCount">5</strong></div>
+                <div id="eligibilityStatus" class="eligibility-status">လျှောက်လွှာတင်ရန် Share ၅ ခု လိုအပ်ပါသည်။</div>
+            </div>
+
             <div class="link-box">
                 <input id="appLink" type="text" readonly value="https://daily-y-app.github.io/Dailywage-Share/" aria-label="DailyWage referral link">
                 <button class="copy-btn" onclick="copyLink()"><i class="fas fa-copy"></i> Referral Link Copy</button>
@@ -231,8 +242,9 @@
             <button class="friend-btn" onclick="shareLink()">
                 <i class="fas fa-user-plus"></i> သူငယ်ချင်းကိုမျှဝေပါ
             </button>
-            <button class="withdraw-btn" onclick="openWithdrawalModal()"><i class="fas fa-money-bill-transfer"></i> လက်ကျန်ငွေထုတ်ရန်</button>
+            <button id="shareClaimButton" class="withdraw-btn" disabled onclick="openWithdrawalModal()"><i class="fas fa-money-bill-transfer"></i> ဆု/ငွေထုတ် လျှောက်လွှာတင်မည်</button>
             <div id="campaignStatus" class="campaign-status"></div>
+            <div id="requestHistory" class="campaign-status"></div>
 
             <a class="admin-contact" href="https://www.facebook.com/people/Pwint-Phyu/pfbid0EY52WAUuMgCMJWcX3sKGxBzmoMD8D7c7xixUKgX95PsRaC93je6QpVH2SUXiT8bxl/" target="_blank" rel="noopener noreferrer">
                 <i class="fab fa-facebook"></i> Admin ကိုဆက်သွယ်ရန်
@@ -245,10 +257,14 @@
     <div id="withdrawalModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="withdrawTitle">
         <div class="modal-card">
             <h3 id="withdrawTitle">💸 ဆုငွေထုတ်ယူရန်</h3>
+            <label for="withdrawName">အမည်</label>
+            <input id="withdrawName" type="text" placeholder="အမည်">
             <label for="withdrawPhone">ဖုန်းနံပါတ်</label>
             <input id="withdrawPhone" type="tel" inputmode="tel" placeholder="08xxxxxxxx">
             <label for="withdrawEmail">Email</label>
             <input id="withdrawEmail" type="email" placeholder="you@example.com">
+            <label for="withdrawPayout">ငွေလက်ခံမည့် Account/နည်းလမ်း (optional)</label>
+            <input id="withdrawPayout" type="text" placeholder="ဥပမာ TrueMoney / ဖုန်းဘေလ်">
             <label for="withdrawAmount">ထုတ်ယူမည့်ပမာဏ (အနည်းဆုံး ၂၀฿)</label>
             <input id="withdrawAmount" type="number" min="20" step="10" placeholder="20">
             <button class="withdraw-btn" onclick="submitWithdrawal()">တောင်းဆိုမည်</button>
@@ -304,7 +320,11 @@
 
         const appLink = 'https://daily-y-app.github.io/Apk-download';
         const shareTitle = 'DailyWage APK';
+        const minShareCount = 5;
         let shareDeviceId = '';
+        let validShareCount = 0;
+        let availableBalance = 0;
+        let currentBalance = {};
 
         function personalShareLink() {
             const url = new URL(location.href);
@@ -417,13 +437,28 @@
             if (!campaignOwnerCode) return;
             try {
                 const snapshot = await shareFirestore.collection('referralBalances').doc(campaignOwnerCode).get();
-                const balance = Number(snapshot.data()?.availableBalance || 0);
-                document.getElementById('balanceAmount').textContent = `${balance}฿`;
+                currentBalance = snapshot.exists ? (snapshot.data() || {}) : {};
+                availableBalance = Number(currentBalance.availableBalance || 0);
+                validShareCount = Number(currentBalance.shareCount ?? currentBalance.validShareCount ?? currentBalance.approvedReferralCount ?? 0);
+                document.getElementById('balanceAmount').textContent = `${availableBalance}฿`;
                 document.getElementById('balanceHint').textContent = `RC: ${campaignOwnerCode} · Admin စိစစ်ပြီး ရရှိထားသောလက်ကျန်`;
+                document.getElementById('validShareCount').textContent = validShareCount;
+                document.getElementById('shareTargetCount').textContent = minShareCount;
+                const remaining = Math.max(0, minShareCount - validShareCount);
+                const button = document.getElementById('shareClaimButton');
+                button.disabled = remaining > 0;
+                document.getElementById('eligibilityStatus').textContent = remaining
+                    ? `လျှောက်လွှာတင်ရန် Share/Referral ${remaining} ခု ထပ်လိုအပ်ပါသည်။ Admin အတည်ပြုထားသော count ကိုသာ တွက်ပါသည်။`
+                    : `✅ Target ပြည့်ပါပြီ။ လျှောက်လွှာတင်နိုင်ပါပြီ။ (လက်ကျန် ${availableBalance}฿)`;
+                await loadShareRequestHistory();
             } catch (error) { setCampaignStatus('လက်ကျန်ကို ယခုခဏ ဖတ်မရသေးပါ။'); }
         }
 
         function openWithdrawalModal() {
+            if (validShareCount < minShareCount) {
+                return showNotice(`Share ${Math.max(0, minShareCount - validShareCount)} ခု ထပ်လိုအပ်ပါသည်။`);
+            }
+            document.getElementById('withdrawName').value = document.getElementById('withdrawName').value || shareProfile.name || '';
             document.getElementById('withdrawAmount').value = document.getElementById('withdrawAmount').value || 20;
             document.getElementById('withdrawPhone').value = document.getElementById('withdrawPhone').value || shareProfile.phone || '';
             document.getElementById('withdrawEmail').value = document.getElementById('withdrawEmail').value || shareProfile.email || '';
@@ -432,25 +467,61 @@
 
         function closeWithdrawalModal() { document.getElementById('withdrawalModal').classList.remove('show'); }
 
+        async function loadShareRequestHistory() {
+            const history = document.getElementById('requestHistory');
+            if (!history || !campaignOwnerCode) return;
+            try {
+                const snapshot = await shareFirestore.collection('withdraw_requests').where('profileCode', '==', campaignOwnerCode).get();
+                const rows = snapshot.docs.map(doc => doc.data()).sort((a, b) => String(b.createdAtIso || '').localeCompare(String(a.createdAtIso || ''))).slice(0, 3);
+                history.innerHTML = rows.length ? `နောက်ဆုံး Request: ${rows.map(row => `${row.status || 'pending'} · ${row.phoneNumber || ''}`).join(' | ')}` : 'ယခင် လျှောက်လွှာမရှိသေးပါ။';
+            } catch (error) { history.textContent = ''; }
+        }
+
         async function submitWithdrawal() {
+            if (validShareCount < minShareCount) return showNotice(`Share ${Math.max(0, minShareCount - validShareCount)} ခု ထပ်လိုအပ်ပါသည်။`);
+            if (!shareDeviceId) shareDeviceId = await getShareDeviceId();
+            const userName = String(document.getElementById('withdrawName').value || shareProfile.name || 'User').trim();
             const phone = String(document.getElementById('withdrawPhone').value || '').replace(/[^0-9]/g, '');
             const email = String(document.getElementById('withdrawEmail').value || '').trim().toLowerCase();
+            const payoutAccount = String(document.getElementById('withdrawPayout').value || '').trim();
             const amount = Number(document.getElementById('withdrawAmount').value || 0);
             if (!campaignOwnerCode || phone.length < 8 || !email.includes('@') || amount < 20) return showNotice('RC, ဖုန်းနံပါတ်၊ Email နှင့် အနည်းဆုံး ၂၀฿ ပမာဏ လိုအပ်ပါသည်။');
+            if (amount > availableBalance) return showNotice(`လက်ကျန် ${availableBalance}฿ ထက် မပိုသော ပမာဏကိုသာ တောင်းခံနိုင်ပါသည်။`);
+            const phoneKey = (await hashShareSignals(phone)).slice(0, 40);
+            const requestRef = shareFirestore.collection('withdraw_requests').doc();
+            const phoneRef = shareFirestore.collection('withdraw_request_phones').doc(phoneKey);
+            const deviceRef = shareFirestore.collection('withdraw_request_devices').doc(shareDeviceId);
             try {
                 const balanceRef = shareFirestore.collection('referralBalances').doc(campaignOwnerCode);
-                const withdrawalRef = shareFirestore.collection('referralWithdrawals').doc(`${campaignOwnerCode}_${Date.now()}`);
                 await shareFirestore.runTransaction(async transaction => {
+                    const requestSnapshot = await transaction.get(requestRef);
+                    const phoneSnapshot = await transaction.get(phoneRef);
+                    const deviceSnapshot = await transaction.get(deviceRef);
                     const balanceSnapshot = await transaction.get(balanceRef);
                     const balance = balanceSnapshot.exists ? balanceSnapshot.data() || {} : {};
+                    if (requestSnapshot.exists) throw new Error('REQUEST_ALREADY_EXISTS');
+                    if (phoneSnapshot.exists) throw new Error('PHONE_ALREADY_USED');
+                    if (deviceSnapshot.exists) throw new Error('DEVICE_ALREADY_USED');
                     if (Number(balance.availableBalance || 0) < amount) throw new Error('INSUFFICIENT_BALANCE');
                     const now = new Date().toISOString();
-                    transaction.set(withdrawalRef, { referrerCode: campaignOwnerCode, referrerName: shareProfile.name || 'User', phoneNumber: phone, email, amount, status: 'Pending', source: 'share-repo', createdAt: now });
-                    transaction.set(shareFirestore.collection('adminNotifications').doc(withdrawalRef.id), { type: 'withdrawal_request', withdrawalId: withdrawalRef.id, referrerCode: campaignOwnerCode, referrerName: shareProfile.name || 'User', phoneNumber: phone, email, amount, status: 'Unread', source: 'share-repo', createdAt: now });
+                    transaction.set(requestRef, { userId: campaignOwnerCode, profileCode: campaignOwnerCode, userName, phoneNumber: phone, email, payoutAccount, shareCountAtRequest: validShareCount, referredSummary: { validShareCount, targetCount: minShareCount, remaining: Math.max(0, minShareCount - validShareCount), balanceAtRequest: Number(balance.availableBalance || 0) }, deviceId: shareDeviceId, amount, status: 'pending', source: 'share-repo', createdAt: firebase.firestore.FieldValue.serverTimestamp(), createdAtIso: now });
+                    transaction.set(phoneRef, { phoneKey, phoneNumber: phone, requestId: requestRef.id, userId: campaignOwnerCode, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+                    transaction.set(deviceRef, { deviceId: shareDeviceId, requestId: requestRef.id, userId: campaignOwnerCode, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
                 });
+                // Keep the existing Admin withdrawal view/data link in addition
+                // to the new canonical withdraw_requests record.
+                try {
+                    const now = new Date().toISOString();
+                    await shareFirestore.collection('referralWithdrawals').doc(requestRef.id).set({ referrerCode: campaignOwnerCode, referrerName: userName, phoneNumber: phone, email, amount, status: 'Pending', source: 'share-repo-share-count', withdrawRequestId: requestRef.id, createdAt: now });
+                    await shareFirestore.collection('adminNotifications').doc(requestRef.id).set({ type: 'withdrawal_request', withdrawalId: requestRef.id, referrerCode: campaignOwnerCode, referrerName: userName, phoneNumber: phone, email, amount, status: 'Unread', source: 'share-repo-share-count', createdAt: now });
+                } catch (legacyError) { console.warn('Legacy withdrawal mirror failed; canonical request remains:', legacyError); }
                 closeWithdrawalModal();
-                showNotice('✅ Withdrawal Request ကို Admin Panel သို့ ပို့ပြီးပါပြီ။');
-            } catch (error) { showNotice(error.message === 'INSUFFICIENT_BALANCE' ? 'လက်ကျန်ငွေ မလုံလောက်ပါ။' : 'Withdrawal Request ပို့မရသေးပါ။'); }
+                showNotice('✅ Share Count ပြည့်မီသော Withdrawal Request ကို Admin Panel သို့ ပို့ပြီးပါပြီ။');
+                await loadShareRequestHistory();
+            } catch (error) {
+                const messages = { PHONE_ALREADY_USED: 'ဒီဖုန်းနံပါတ်ဖြင့် လျှောက်ထားပြီးသားဖြစ်ပါသည်။', DEVICE_ALREADY_USED: 'ဒီ Device မှ လျှောက်ထားပြီးသားဖြစ်ပါသည်။', INSUFFICIENT_BALANCE: 'လက်ကျန်ငွေ မလုံလောက်ပါ။', REQUEST_ALREADY_EXISTS: 'Request ထပ်တင်၍မရပါ။' };
+                showNotice(messages[error.message] || 'Withdrawal Request ပို့မရသေးပါ။');
+            }
         }
 
         async function initializeCampaign() {
