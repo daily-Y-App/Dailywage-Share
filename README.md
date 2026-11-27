@@ -32,6 +32,7 @@ Request ကို Admin Panel က `withdraw_requests` ကို Firestore `onSna
 
 Payout profile form ကို balance ၀ ဖြစ်နေသေးချိန်နှင့် Share Count target မပြည့်သေးချိန်တွင်လည်း ဖြည့်ပြီး ကြိုသိမ်းနိုင်သည်။ Local device storage နှင့် `referralPayoutProfiles` နှစ်ခုလုံးတွင် သိမ်းပြီး နောက်ပိုင်း withdrawal form ထဲသို့ အလိုအလျောက် ဖြည့်ပေးသည်။
 Payout profile ကို user က ပြင်ဆင်/သိမ်းတိုင်း `verificationStatus: pending` ဖြစ်ပြီး Admin Panel မှ Verify မလုပ်မချင်း ငွေပေးချေမှု မပြုလုပ်ပါ။
+Share page သည် standalone page ဖြစ်ပြီး user Firebase Auth မချိတ်ထားသေးသောကြောင့် payout profile ကို `pending` အဖြစ် Cloud Firestore သို့ create/update လုပ်ခွင့်ကို rules တွင် သီးခြားပေးထားသည်။ Read နှင့် Verify/Reject ကို Admin Auth သာပြုလုပ်နိုင်သည်။ Rules deploy မလုပ်ရသေးပါက browser တွင် local save fallback သာဖြစ်ပြီး Admin Panel တွင် မပေါ်ပါ။
 
 ## Security
 

@@ -474,6 +474,7 @@
                 payoutMethod: String(document.getElementById('payoutMethod').value || '').trim(),
                 payoutAccount: String(document.getElementById('payoutAccount').value || '').trim(),
                 profileCode: campaignOwnerCode,
+                deviceId: shareDeviceId || '',
                 verificationStatus: 'pending',
                 updatedAtIso: new Date().toISOString()
             };
